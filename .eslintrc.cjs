@@ -15,6 +15,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "semi": ["error", "never"],
-    "quotes": ["warn", "single"]
+    "quotes": ["warn", "single"],
+    '@typescript-eslint/no-explicit-any': 'warn',
   },
 }
