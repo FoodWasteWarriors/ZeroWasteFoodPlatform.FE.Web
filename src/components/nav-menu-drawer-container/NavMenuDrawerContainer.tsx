@@ -1,14 +1,19 @@
 import { Box, Drawer } from '@mui/material'
 import { useAppSelector, useAppDispatch } from '../../utils/hooks/reduxHooks'
-import { toggleDrawer } from '../../store/features/drawer/drawerSlice'
-import DrawerContent from '../drawer-content/DrawerContent'
+import { toggleNavMenuDrawer } from '../../store/features/nav-menu-drawer/navMenuDrawerSlice'
+import NavMenuDrawerContent from '../nav-menu-drawer-content/NavMenuDrawerContent'
+import {
+  selectNavMenuDrawerIsOpen,
+  selectNavMenuDrawerWidth,
+} from '../../store/features/nav-menu-drawer/navMenuDrawerSelectors'
 
-function DrawerContainer() {
-  const { width, isOpen } = useAppSelector((state) => state.drawer)
+function NavMenuDrawerContainer() {
+  const width = useAppSelector(selectNavMenuDrawerWidth)
+  const isOpen = useAppSelector(selectNavMenuDrawerIsOpen)
   const dispatch = useAppDispatch()
 
   const handleToggleDrawer = () => {
-    dispatch(toggleDrawer())
+    dispatch(toggleNavMenuDrawer())
   }
 
   return (
@@ -32,7 +37,7 @@ function DrawerContainer() {
           },
         }}
       >
-        {<DrawerContent />}
+        {<NavMenuDrawerContent />}
       </Drawer>
       <Drawer
         variant='permanent'
@@ -45,10 +50,10 @@ function DrawerContainer() {
         }}
         open
       >
-        {<DrawerContent />}
+        {<NavMenuDrawerContent />}
       </Drawer>
     </Box>
   )
 }
 
-export default DrawerContainer
+export default NavMenuDrawerContainer

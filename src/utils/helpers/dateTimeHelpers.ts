@@ -23,3 +23,12 @@ export function getCurrentTime(): string {
 
   return `${hours}:${minutes}:${seconds}`
 }
+
+export function getFormattedDate(date: string): string {
+  const dateObj = new Date(date)
+  const year = dateObj.getFullYear()
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const day = String(dateObj.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}

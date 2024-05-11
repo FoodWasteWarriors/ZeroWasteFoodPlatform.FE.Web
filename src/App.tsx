@@ -4,18 +4,20 @@ import { Box, ThemeProvider, CssBaseline, Toolbar } from '@mui/material'
 import { useAppSelector } from './utils/hooks/reduxHooks'
 import mainTheme from './assets/theme/mainTheme'
 
-import StoreProducts from './pages/store-products/store-products'
+import StoreProducts from './pages/store-products/StoreProducts'
 import Login from './pages/login/Login'
 import Header from './components/header/Header'
 import NotFound from './pages/not-found/NotFound'
-import DrawerContainer from './components/drawer-container/DrawerContainer'
+import DrawerContainer from './components/nav-menu-drawer-container/NavMenuDrawerContainer'
 
 import './App.scss'
+import { selectNavMenuDrawer } from './store/features/nav-menu-drawer/navMenuDrawerSelectors'
+import { selectThemeMode } from './store/features/theme/themeSelectors'
 
 function App() {
-  const themeMode = useAppSelector((state) => state.theme.themeMode)
+  const themeMode = useAppSelector(selectThemeMode)
   const theme = useMemo(() => mainTheme(themeMode), [themeMode])
-  const drawerWidth = useAppSelector((state) => state.drawer.width)
+  const drawerWidth = useAppSelector(selectNavMenuDrawer)
 
   return (
     <ThemeProvider theme={theme}>
