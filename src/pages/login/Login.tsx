@@ -1,15 +1,29 @@
 import { useFormik } from 'formik'
 import { Button, TextField } from '@mui/material'
 import loginSchema from '../../utils/validation/loginSchema'
-
-type FormValues = {
-  email: string
-  password: string
-}
+import { useLoginUserMutation } from '../../store/apis/authApi'
+import { useAppDispatch } from '../../utils/hooks/reduxHooks'
+import { login } from '../../store/features/auth/authSlice'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
-  const onSubmit = (values: FormValues) => {
-    console.log(values)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const [loginUser] = useLoginUserMutation()
+  const [errMessages, setErrMessages] = useState<ResponseMessage[]>([])
+
+  const onSubmit = (values: UserLoginDto) => {
+    loginUser(values)
+      .unwrap()
+      .then((response) => {
+        dispatch(login(response!.data!))
+        setErrMessages([])
+        navigate('/')
+      })
+      .catch((error) => {
+        setErrMessages(error.data.messages)
+      })
   }
 
   const { handleSubmit, handleChange, values, touched, errors } = useFormik({
@@ -45,6 +59,10 @@ function Login() {
       <Button type='submit' variant='contained' color='primary'>
         Login
       </Button>
+
+      {errMessages.map((message, index) => (
+        <div key={index}>{message.description}</div>
+      ))}
     </form>
   )
 }

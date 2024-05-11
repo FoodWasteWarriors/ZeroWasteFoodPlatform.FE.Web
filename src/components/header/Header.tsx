@@ -12,20 +12,21 @@ import {
 
 import { applicationName } from '../../constants/navbarConstants'
 
-import './Header.css'
+import './Header.scss'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
 import { toggleDrawer } from '../../store/features/drawer/drawerSlice'
+import { logout } from '../../store/features/auth/authSlice'
 
 function Header() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { width } = useAppSelector((state) => state.drawer)
-
-  // TODO: Get user type from redux store
-  const userType = ''
+  const [isAuthenticated] = useAppSelector((state) => [
+    state.auth.isAuthenticated,
+  ])
 
   const handleLogout = () => {
-    // TODO: Implement logout
+    dispatch(logout())
   }
 
   const handleLogin = () => {
@@ -70,14 +71,18 @@ function Header() {
           </Typography>
         </Box>
 
-        {userType == '' ? (
-          <Button color='inherit' size='large' onClick={handleLogin}>
-            Login
-          </Button>
+        {isAuthenticated ? (
+          <>
+            <Button color='inherit' onClick={handleLogout}>
+              Logout
+            </Button>
+          </>
         ) : (
-          <Button color='inherit' size='large' onClick={handleLogout}>
-            Logout
-          </Button>
+          <>
+            <Button color='inherit' onClick={handleLogin}>
+              Login
+            </Button>
+          </>
         )}
       </Toolbar>
     </AppBar>

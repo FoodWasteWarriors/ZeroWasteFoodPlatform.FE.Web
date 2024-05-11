@@ -4,13 +4,13 @@ import { Box, ThemeProvider, CssBaseline, Toolbar } from '@mui/material'
 import { useAppSelector } from './utils/hooks/reduxHooks'
 import mainTheme from './assets/theme/mainTheme'
 
-import About from './pages/about/About'
+import StoreProducts from './pages/store-products/store-products'
 import Login from './pages/login/Login'
 import Header from './components/header/Header'
 import NotFound from './pages/not-found/NotFound'
 import DrawerContainer from './components/drawer-container/DrawerContainer'
 
-import './App.css'
+import './App.scss'
 
 function App() {
   const themeMode = useAppSelector((state) => state.theme.themeMode)
@@ -34,7 +34,7 @@ function App() {
           <Toolbar />
           <Box sx={{ p: 3 }}>
             <Routes>
-              <Route path='/about' element={<About />} />
+              <Route path='/' element={<StoreProducts />} />
               <Route path='/login' element={<Login />} />
               <Route path='*' element={<NotFound />} />
             </Routes>{' '}

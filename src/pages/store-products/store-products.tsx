@@ -1,11 +1,15 @@
 import { useGetStoreProductsQuery } from '../../store/apis/storeProducsApi'
+import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
 
-function About() {
-  const { data, error, isLoading } = useGetStoreProductsQuery()
+function StoreProducts() {
+  const { data, error, isLoading } = useGetStoreProductsQuery({})
 
   if (isLoading) return <div>Loading...</div>
 
-  if (error) return <div>Error: {JSON.stringify(error)}</div>
+  if (error) {
+    console.error(error)
+    return <DefaultErrorMessage message='Error loading store products' />
+  }
 
   return (
     <div>
@@ -19,4 +23,4 @@ function About() {
   )
 }
 
-export default About
+export default StoreProducts

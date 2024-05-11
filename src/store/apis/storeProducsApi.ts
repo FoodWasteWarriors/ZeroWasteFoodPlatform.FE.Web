@@ -1,72 +1,107 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { RootState } from '..'
 
 const storeProductsApi = createApi({
   reducerPath: 'storeProductsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://localhost:7159/api/v1/' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://localhost:7159/api/v1/storeproduct',
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token?.accessToken
+
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`)
+      }
+
+      return headers
+    },
+  }),
   endpoints: (builder) => ({
     getStoreProducts: builder.query<
-      ServiceCollectionResponse<StoreProduct>,
-      void
+      ServiceCollectionResponse<StoreProductGetDto>,
+      {
+        page?: number
+        pageSize?: number
+        nameQuery?: string
+      }
     >({
-      query: () => 'storeproduct',
+      query: ({ page = 1, pageSize = 10, nameQuery }) => ({
+        url: '/',
+        params: { page, pageSize, nameQuery },
+      }),
     }),
     getStoreProductById: builder.query<
-      ServiceObjectResponse<StoreProduct>,
-      string
+      ServiceObjectResponse<StoreProductGetDto>,
+      {
+        id: string
+        page?: number
+        pageSize?: number
+        nameQuery?: string
+      }
     >({
-      query: (id) => `storeproduct/${id}`,
+      query: ({ id, page = 1, pageSize = 10, nameQuery }) => ({
+        url: `/${id}`,
+        params: { page, pageSize, nameQuery },
+      }),
     }),
     getStoreProductsByUserId: builder.query<
-      ServiceCollectionResponse<StoreProduct>,
-      string
+      ServiceCollectionResponse<StoreProductGetDto>,
+      {
+        userId: string
+        page?: number
+        pageSize?: number
+        nameQuery?: string
+      }
     >({
-      query: (userId) => `storeproduct/user/${userId}`,
+      query: ({ userId, page = 1, pageSize = 10, nameQuery }) => ({
+        url: `/user/${userId}`,
+        params: { page, pageSize, nameQuery },
+      }),
     }),
     deleteStoreProduct: builder.mutation<
-      ServiceObjectResponse<StoreProduct>,
+      ServiceObjectResponse<StoreProductGetDto>,
       string
     >({
       query: (id) => ({
-        url: `storeproduct/${id}`,
+        url: `/${id}`,
         method: 'DELETE',
       }),
     }),
     createStoreProduct: builder.mutation<
-      ServiceObjectResponse<StoreProduct>,
-      Partial<StoreProduct>
+      ServiceObjectResponse<StoreProductGetDto>,
+      StoreProductAddDto
     >({
       query: (storeProduct) => ({
-        url: 'storeproduct',
+        url: '/',
         method: 'POST',
         body: storeProduct,
       }),
     }),
     updateStoreProduct: builder.mutation<
-      ServiceObjectResponse<StoreProduct>,
-      Partial<StoreProduct>
+      ServiceObjectResponse<StoreProductGetDto>,
+      StoreProductUpdateDto
     >({
       query: ({ id, ...storeProduct }) => ({
-        url: `storeproduct/${id}`,
+        url: `/${id}`,
         method: 'PUT',
         body: storeProduct,
       }),
     }),
     addToShoppingList: builder.mutation<
-      ServiceObjectResponse<StoreProduct>,
-      AddRemoveToShoppingListBody
+      ServiceObjectResponse<StoreProductGetDto>,
+      StoreProductManipulateShoppingListDto
     >({
       query: (body) => ({
-        url: 'storeproduct/add-to-shopping-list',
+        url: '/add-to-shopping-list',
         method: 'POST',
         body,
       }),
     }),
     removeFromShoppingList: builder.mutation<
-      ServiceObjectResponse<StoreProduct>,
-      AddRemoveToShoppingListBody
+      ServiceObjectResponse<StoreProductGetDto>,
+      StoreProductManipulateShoppingListDto
     >({
       query: (body) => ({
-        url: 'storeproduct/remove-from-shopping-list',
+        url: '/remove-from-shopping-list',
         method: 'POST',
         body,
       }),
