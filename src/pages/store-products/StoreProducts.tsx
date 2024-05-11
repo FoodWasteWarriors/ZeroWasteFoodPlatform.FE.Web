@@ -1,5 +1,7 @@
 import { useGetStoreProductsQuery } from '../../store/apis/storeProducsApi'
 import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
+import FilterProductsDrawer from '../../components/filter-products-drawer-container/FilterProductsDrawerContainer'
+import { Box } from '@mui/system'
 
 function StoreProducts() {
   const { data, error, isLoading } = useGetStoreProductsQuery({})
@@ -12,14 +14,16 @@ function StoreProducts() {
   }
 
   return (
-    <div>
+    <Box>
       <h1>Store Products</h1>
       {data?.data?.map((storeProduct) => (
         <div key={storeProduct.id}>
           {storeProduct.name} - ${storeProduct.originalPrice}
         </div>
       ))}
-    </div>
+
+      <FilterProductsDrawer />
+    </Box>
   )
 }
 

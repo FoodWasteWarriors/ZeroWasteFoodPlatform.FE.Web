@@ -14,16 +14,15 @@ import { applicationName } from '../../constants/navbarConstants'
 
 import './Header.scss'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
-import { toggleDrawer } from '../../store/features/drawer/drawerSlice'
+import { toggleNavMenuDrawer } from '../../store/features/nav-menu-drawer/navMenuDrawerSlice'
 import { logout } from '../../store/features/auth/authSlice'
+import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
 
 function Header() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { width } = useAppSelector((state) => state.drawer)
-  const [isAuthenticated] = useAppSelector((state) => [
-    state.auth.isAuthenticated,
-  ])
+  const { width } = useAppSelector((state) => state.navMenuDrawer)
+  const isAuthenticated = useAppSelector(selectAuthIsAuthenticated)
 
   const handleLogout = () => {
     dispatch(logout())
@@ -38,7 +37,7 @@ function Header() {
   }
 
   const handleThemeDrawer = () => {
-    dispatch(toggleDrawer())
+    dispatch(toggleNavMenuDrawer())
   }
 
   return (
@@ -47,6 +46,7 @@ function Header() {
       sx={{
         width: { md: `calc(100% - ${width}px)` },
         ml: { md: `${width}px` },
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar>

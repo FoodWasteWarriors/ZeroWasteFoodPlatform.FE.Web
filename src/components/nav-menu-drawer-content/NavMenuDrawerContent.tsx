@@ -12,9 +12,9 @@ import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
 
 import CopyRight from '../copy-right/CopyRight.tsx'
-import SwitchThemeMode from '../theme-mode-switch/ThemeModeSwitch'
+import SwitchThemeMode from '../theme-mode-switch/ThemeModeSwitch.tsx'
 
-function DrawerContent() {
+function NavMenuDrawerContent() {
   const navigate = useNavigate()
   const [privateMenus, setPrivateMenus] = useState<SideMenuItem[]>([])
 
@@ -70,4 +70,4 @@ function DrawerContent() {
   )
 }
 
-export default DrawerContent
+export default NavMenuDrawerContent
