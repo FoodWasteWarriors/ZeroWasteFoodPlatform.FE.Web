@@ -13,7 +13,7 @@ declare type StoreProduct = {
 declare type Category = {
   id: string
   name: string
-  description: string
+  description: string | null
   photo: string
 }
 
@@ -34,5 +34,3 @@ declare type Business = {
   phoneNumberVerified: boolean
   lastLoginTime: Date
 }
-
-declare type UserRole = 'Admin' | 'Customer' | 'Business' | null
