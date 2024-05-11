@@ -1,10 +1,14 @@
 import { useGetStoreProductsQuery } from '../../store/apis/storeProducsApi'
 import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
 import FilterProductsDrawer from '../../components/filter-products-drawer-container/FilterProductsDrawerContainer'
-import { Box } from '@mui/system'
+import { Box, Grid, Typography } from '@mui/material'
+import StoreProductCard from '../../components/store-product-card/StoreProductCard'
+import { useAppSelector } from '../../utils/hooks/reduxHooks'
+import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
 
 function StoreProducts() {
   const { data, error, isLoading } = useGetStoreProductsQuery({})
+  const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
 
   if (isLoading) return <div>Loading...</div>
 
@@ -14,15 +18,23 @@ function StoreProducts() {
   }
 
   return (
-    <Box>
-      <h1>Store Products</h1>
-      {data?.data?.map((storeProduct) => (
-        <div key={storeProduct.id}>
-          {storeProduct.name} - ${storeProduct.originalPrice}
-        </div>
-      ))}
-
+    <Box
+      sx={{
+        flexGrow: 1,
+        width: { sm: `calc(100% - ${filterDrawerLength}px)` },
+      }}
+    >
       <FilterProductsDrawer />
+      <Typography variant='h3' component='h1' fontSize={36} mb={2}>
+        Store Products
+      </Typography>
+      <Grid container spacing={2}>
+        {data?.data?.map((storeProduct) => (
+          <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
+            <StoreProductCard storeProduct={storeProduct} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   )
 }
