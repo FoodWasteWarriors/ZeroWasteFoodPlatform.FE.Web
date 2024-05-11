@@ -4,10 +4,12 @@ import {
   CardMedia,
   Typography,
   IconButton,
+  Box,
 } from '@mui/material'
 import { getFinalPrice } from '../../utils/helpers/priceHelpers'
 import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
 import { Favorite } from '@mui/icons-material'
+import SellIcon from '@mui/icons-material/Sell'
 import { useState } from 'react'
 
 type PropType = {
@@ -28,8 +30,15 @@ function StoreProductCard(props: PropType) {
     setIsFavorite(!isFavorite)
   }
 
+  const discountRate = storeProduct.percentDiscount
+    ? `${storeProduct.percentDiscount}% OFF`
+    : null
+
   return (
     <Card sx={{ position: 'relative', paddingBottom: '24px' }}>
+      <Typography variant='body1' color='textSecondary' fontWeight={900} p={1}>
+        {storeProduct.business.name}
+      </Typography>
       <CardMedia
         component='img'
         alt={storeProduct.name}
@@ -37,30 +46,66 @@ function StoreProductCard(props: PropType) {
         image={storeProduct.photo}
         title={storeProduct.name}
       />
+      {discountRate && (
+        <Box
+          sx={{
+            position: 'absolute',
+            fontSize: '15x',
+            top: '8px',
+            right: '8px',
+            backgroundColor: 'rgba(255, 00, 160, 0.7)',
+            color: 'white',
+            padding: '4px',
+            fontWeight: 'bold',
+            borderRadius: '4px',
+          }}
+        >
+          <SellIcon fontSize='inherit' />
+          {discountRate}
+        </Box>
+      )}
       <CardContent>
-        <Typography variant='h5' component='h2'>
+        <Typography variant='h5' component='h2' fontSize={20}>
           {storeProduct.name}
         </Typography>
-        <Typography variant='body1' color='textSecondary'>
-          Price with Discount: $
-          {finalPrice.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </Typography>
         {storeProduct.expirationDate && (
-          <Typography variant='body1' color='textSecondary'>
-            Expiration Date: {getFormattedDate(storeProduct.expirationDate)}
+          <Typography variant='body2' color='textSecondary' marginBottom={1}>
+            Expires In: {getFormattedDate(storeProduct.expirationDate)}
           </Typography>
         )}
-        <Typography variant='body1' color='textSecondary'>
-          Avaible In: {storeProduct.business.name}
-        </Typography>
+        <Box
+          fontSize={18}
+          sx={{
+            position: 'absolute',
+            bottom: '8px',
+            left: '15px',
+            display: 'flex',
+          }}
+        >
+          <Typography
+            variant='h6'
+            color='textSecondary'
+            sx={{
+              textDecoration: 'line-through',
+              fontSize: '14px',
+            }}
+          >
+            ${storeProduct.originalPrice.toFixed(2)}
+          </Typography>
+          <Typography
+            variant='h6'
+            component='h3'
+            color={'primary'}
+            sx={{ marginLeft: '4px', fontSize: '22px' }}
+          >
+            ${finalPrice.toFixed(2)}
+          </Typography>
+        </Box>
       </CardContent>
       <IconButton
         style={{
           position: 'absolute',
-          bottom: '8px',
+          bottom: '2px',
           right: '8px',
           color: isFavorite ? 'red' : 'silver',
         }}
