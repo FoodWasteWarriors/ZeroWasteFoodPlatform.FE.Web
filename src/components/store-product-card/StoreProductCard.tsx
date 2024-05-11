@@ -11,6 +11,7 @@ import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
 import { Favorite } from '@mui/icons-material'
 import SellIcon from '@mui/icons-material/Sell'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 type PropType = {
   storeProduct: StoreProductGetDto
@@ -36,9 +37,17 @@ function StoreProductCard(props: PropType) {
 
   return (
     <Card sx={{ position: 'relative', paddingBottom: '24px' }}>
-      <Typography variant='body1' color='textSecondary' fontWeight={900} p={1}>
-        {storeProduct.business.name}
-      </Typography>
+      <Link to={`/business/${storeProduct.business.id}`}>
+        <Typography
+          variant='body1'
+          color='textSecondary'
+          fontWeight={900}
+          p={1}
+          sx={{ '&:hover': { textDecoration: 'underline' } }}
+        >
+          {storeProduct.business.name}
+        </Typography>
+      </Link>
       <CardMedia
         component='img'
         alt={storeProduct.name}
