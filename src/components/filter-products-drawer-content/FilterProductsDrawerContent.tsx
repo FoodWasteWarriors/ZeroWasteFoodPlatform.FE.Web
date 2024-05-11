@@ -33,7 +33,6 @@ function FilterProductsDrawerContent() {
   // Define options for categories and stores
   const categoryOptions = ['Category 1', 'Category 2', 'Category 3']
   const storeOptions = ['Store 1', 'Store 2', 'Store 3']
-  const storeNames = ['Store 1', 'Store 2', 'Store 3']
 
   // Handle apply filters
   const handleApplyFilters = () => {
@@ -42,7 +41,7 @@ function FilterProductsDrawerContent() {
 
   return (
     <Box sx={{ overflow: 'auto', marginTop: 4 }}>
-      <FormControl sx={{ m: 2, width: '85%' }}>
+      <FormControl sx={{ m: 2, width: '88%' }}>
         <InputLabel id='sort-by-label'>Sort By</InputLabel>
         <Select
           labelId='sort-by-label'
@@ -63,7 +62,7 @@ function FilterProductsDrawerContent() {
       <Divider />
 
       <TextField
-        sx={{ m: 2, width: '85%' }}
+        sx={{ m: 2, width: '88%' }}
         label='Search Products'
         value={searchText}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -96,7 +95,7 @@ function FilterProductsDrawerContent() {
         Discount
       </Typography>
       <Slider
-        sx={{ m: 2, width: '85%' }}
+        sx={{ m: 2, ml: 3, width: '85%' }}
         value={discountRange}
         onChange={(event: Event, newValue: number | number[]) =>
           setDiscountRange(newValue as [number, number])
@@ -121,7 +120,7 @@ function FilterProductsDrawerContent() {
         id='categories'
         options={categoryOptions}
         value={selectedCategories}
-        sx={{ m: 2, width: '85%' }}
+        sx={{ m: 2, width: '88%' }}
         onChange={(event: ChangeEvent<{}>, newValue: string[]) =>
           setSelectedCategories(newValue)
         }
@@ -144,7 +143,7 @@ function FilterProductsDrawerContent() {
         id='stores'
         options={storeOptions}
         value={selectedStores}
-        sx={{ m: 2, width: '85%' }}
+        sx={{ m: 2, width: '88%' }}
         onChange={(event: ChangeEvent<{}>, newValue: string[]) =>
           setSelectedStores(newValue)
         }
@@ -162,7 +161,7 @@ function FilterProductsDrawerContent() {
 
       <Button
         variant='contained'
-        sx={{ m: 2, width: '85%', p: 2, pt: 2.3 }}
+        sx={{ m: 2, width: '88%', p: 2, pt: 2.3 }}
         onClick={handleApplyFilters}
       >
         Apply Filters
