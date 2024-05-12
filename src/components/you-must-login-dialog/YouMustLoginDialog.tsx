@@ -46,11 +46,11 @@ function YouMustLoginDialog(props: PropsType) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleLogin} color='primary'>
-          Login
-        </Button>
         <Button onClick={handleClose} color='primary'>
           Cancel
+        </Button>
+        <Button onClick={handleLogin} color='primary'>
+          Login
         </Button>
       </DialogActions>
     </Dialog>
