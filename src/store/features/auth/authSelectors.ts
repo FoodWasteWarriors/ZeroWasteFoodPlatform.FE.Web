@@ -10,6 +10,16 @@ export const selectAuthIsAuthenticated = createSelector(
 
 export const selectAuthUser = createSelector(selectAuth, (auth) => auth.user)
 
+export const selectAuthUserId = createSelector(
+  selectAuth,
+  (auth) => auth.user?.id
+)
+
+export const selectAuthUserType = createSelector(
+  selectAuth,
+  (auth) => auth.user?.role
+)
+
 export const selectAuthTokenObject = createSelector(
   selectAuth,
   (auth) => auth.token

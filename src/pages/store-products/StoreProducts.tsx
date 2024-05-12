@@ -9,7 +9,6 @@ import StoreProductCard from '../../components/store-product-card/StoreProductCa
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
 import { useState, useEffect } from 'react'
-import { selectThemeMode } from '../../store/features/theme/themeSelectors'
 
 type PropsType = {
   storeId: string
@@ -18,7 +17,6 @@ type PropsType = {
 const productPerPage = 24
 
 function StoreProducts(props: PropsType) {
-  const themeMode = useAppSelector(selectThemeMode)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const { storeId } = props

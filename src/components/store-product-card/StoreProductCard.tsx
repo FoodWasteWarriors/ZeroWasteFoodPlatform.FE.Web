@@ -12,6 +12,9 @@ import { Favorite } from '@mui/icons-material'
 import SellIcon from '@mui/icons-material/Sell'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
+import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
 
 type PropType = {
   storeProduct: StoreProductGetDto
@@ -19,6 +22,8 @@ type PropType = {
 
 function StoreProductCard(props: PropType) {
   const { storeProduct } = props
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const isAuthenticated = useSelector(selectAuthIsAuthenticated)
 
   const finalPrice = getFinalPrice(
     storeProduct.originalPrice,
@@ -28,6 +33,11 @@ function StoreProductCard(props: PropType) {
   const [isFavorite, setIsFavorite] = useState(false)
 
   const handleFavoriteClick = () => {
+    if (!isAuthenticated) {
+      setIsDialogOpen(true)
+      return
+    }
+
     setIsFavorite(!isFavorite)
   }
 
@@ -119,10 +129,12 @@ function StoreProductCard(props: PropType) {
           color: isFavorite ? 'red' : 'silver',
         }}
         aria-label='favorite'
-        onClick={handleFavoriteClick}
+        onClick={() => handleFavoriteClick()}
       >
         <Favorite />
       </IconButton>
+
+      <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </Card>
   )
 }
