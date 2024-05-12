@@ -16,6 +16,7 @@ import SwitchThemeMode from '../theme-mode-switch/ThemeModeSwitch.tsx'
 import NotLoggedInInfo from '../not-logged-in-info/NotLoggedInInfo.tsx'
 import { selectAuthUserType } from '../../store/features/auth/authSelectors.ts'
 import { useAppSelector } from '../../utils/hooks/reduxHooks.ts'
+import ProfileSection from '../profile-section/ProfileSection.tsx'
 
 function NavMenuDrawerContent() {
   const navigate = useNavigate()
@@ -33,6 +34,10 @@ function NavMenuDrawerContent() {
       <Toolbar>
         <SwitchThemeMode />
       </Toolbar>
+      <Divider />
+
+      {userType && <ProfileSection />}
+
       <Divider />
       <List>
         {loggedInUserActions.common.map(({ link, to, icon }) => (
