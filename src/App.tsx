@@ -13,6 +13,7 @@ import DrawerContainer from './components/nav-menu-drawer-container/NavMenuDrawe
 import './App.scss'
 import { selectNavMenuDrawer } from './store/features/nav-menu-drawer/navMenuDrawerSelectors'
 import { selectThemeMode } from './store/features/theme/themeSelectors'
+import Store from './pages/store/Store'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -38,8 +39,9 @@ function App() {
             <Routes>
               <Route path='/' element={<StoreProducts />} />
               <Route path='/login' element={<Login />} />
+              <Route path='/store/:storeId' element={<Store />} />
               <Route path='*' element={<NotFound />} />
-            </Routes>{' '}
+            </Routes>
           </Box>
         </Box>
       </Box>

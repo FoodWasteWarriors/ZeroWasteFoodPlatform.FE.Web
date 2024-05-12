@@ -9,6 +9,7 @@ import { selectFilterProductsDrawerWidth } from '../../store/features/filter-pro
 function StoreProducts() {
   const { data, error, isLoading } = useGetStoreProductsQuery({})
   const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
+  const navMenuDrawerWidth = useAppSelector(selectFilterProductsDrawerWidth)
 
   if (isLoading) return <div>Loading...</div>
 
@@ -18,20 +19,27 @@ function StoreProducts() {
   }
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        width: { sm: `calc(100% - ${filterDrawerLength}px)` },
-      }}
-    >
-      <FilterProductsDrawer />
-      <Grid container spacing={2}>
+    <Box>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          flexGrow: 1,
+          width: {
+            xs: '100%',
+            sm: `calc(130% - ${navMenuDrawerWidth}px)`,
+            md: `calc(100% - ${filterDrawerLength}px)`,
+          },
+        }}
+      >
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
             <StoreProductCard storeProduct={storeProduct} />
           </Grid>
         ))}
       </Grid>
+
+      <FilterProductsDrawer />
     </Box>
   )
 }
