@@ -9,19 +9,28 @@ import StoreProductCard from '../../components/store-product-card/StoreProductCa
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
 import { useState, useEffect } from 'react'
-import { selectThemeMode } from '../../store/features/theme/themeSelectors'
+import { useGetShoppingListQuery } from '../../store/apis/customerApi'
+import { selectAuthUserId } from '../../store/features/auth/authSelectors'
 
 type PropsType = {
-  storeId: string
+  storeId: string | undefined
 }
 
 const productPerPage = 24
 
 function StoreProducts(props: PropsType) {
-  const themeMode = useAppSelector(selectThemeMode)
+  const { storeId } = props
+  const userId = useAppSelector(selectAuthUserId)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const { storeId } = props
+
+  let shoppingList = [] as StoreProductGetDto[] | null
+
+  const shoppingListData = useGetShoppingListQuery(userId!)
+
+  if (shoppingListData.data) {
+    shoppingList = shoppingListData.data.data
+  }
 
   const allProducts = useGetStoreProductsQuery({
     pageSize: storeId ? 0 : productPerPage,
@@ -30,7 +39,7 @@ function StoreProducts(props: PropsType) {
 
   const userProducts = useGetStoreProductsByUserIdQuery({
     pageSize: storeId ? productPerPage : 0,
-    userId: storeId,
+    userId: storeId!,
     page: currentPage,
   })
 
@@ -79,7 +88,12 @@ function StoreProducts(props: PropsType) {
       >
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
-            <StoreProductCard storeProduct={storeProduct} />
+            <StoreProductCard
+              storeProduct={storeProduct}
+              inTheShoppingList={shoppingList?.some(
+                (p) => p.id === storeProduct.id
+              )}
+            />
           </Grid>
         ))}
         <Box

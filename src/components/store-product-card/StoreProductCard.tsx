@@ -10,25 +10,52 @@ import { getFinalPrice } from '../../utils/helpers/priceHelpers'
 import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
 import { Favorite } from '@mui/icons-material'
 import SellIcon from '@mui/icons-material/Sell'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
+import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
+import { useAppSelector } from '../../utils/hooks/reduxHooks'
+import {
+  useAddToShoppingListMutation,
+  useRemoveFromShoppingListMutation,
+} from '../../store/apis/storeProducsApi'
 
 type PropType = {
   storeProduct: StoreProductGetDto
+  inTheShoppingList: boolean | undefined
 }
 
 function StoreProductCard(props: PropType) {
-  const { storeProduct } = props
+  const { storeProduct, inTheShoppingList } = props
+  const [isFavorite, setIsFavorite] = useState(inTheShoppingList)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const isAuthenticated = useAppSelector(selectAuthIsAuthenticated)
 
   const finalPrice = getFinalPrice(
     storeProduct.originalPrice,
     storeProduct.percentDiscount
   )
 
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [addToShoppingList] = useAddToShoppingListMutation()
+  const [removeFromShoppingList] = useRemoveFromShoppingListMutation()
+
+  useEffect(() => {
+    setIsFavorite(inTheShoppingList)
+  }, [inTheShoppingList])
 
   const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite)
+    if (!isAuthenticated) {
+      setIsDialogOpen(true)
+      return
+    }
+
+    if (isFavorite) {
+      removeFromShoppingList({ productId: storeProduct.id })
+      setIsFavorite(false)
+    } else {
+      addToShoppingList({ productId: storeProduct.id })
+      setIsFavorite(true)
+    }
   }
 
   const discountRate = storeProduct.percentDiscount
@@ -119,10 +146,12 @@ function StoreProductCard(props: PropType) {
           color: isFavorite ? 'red' : 'silver',
         }}
         aria-label='favorite'
-        onClick={handleFavoriteClick}
+        onClick={() => handleFavoriteClick()}
       >
         <Favorite />
       </IconButton>
+
+      <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </Card>
   )
 }

@@ -9,9 +9,9 @@ const loggedInUserActions = {
       icon: <Store />,
     },
   ] as SideMenuItem[],
-  globalAdmin: [] as SideMenuItem[],
-  business: [] as SideMenuItem[],
-  customer: [] as SideMenuItem[],
+  Admin: [] as SideMenuItem[],
+  Business: [] as SideMenuItem[],
+  Customer: [] as SideMenuItem[],
 }
 
 export default loggedInUserActions
