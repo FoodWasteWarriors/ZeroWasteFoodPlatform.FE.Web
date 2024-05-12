@@ -1,13 +1,58 @@
-import { useGetStoreProductsQuery } from '../../store/apis/storeProducsApi'
+import {
+  useGetStoreProductsQuery,
+  useGetStoreProductsByUserIdQuery,
+} from '../../store/apis/storeProducsApi'
 import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
 import FilterProductsDrawer from '../../components/filter-products-drawer-container/FilterProductsDrawerContainer'
-import { Box, Grid } from '@mui/material'
+import { Box, Grid, Pagination } from '@mui/material'
 import StoreProductCard from '../../components/store-product-card/StoreProductCard'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
+import { useState, useEffect } from 'react'
+import { selectThemeMode } from '../../store/features/theme/themeSelectors'
 
-function StoreProducts() {
-  const { data, error, isLoading } = useGetStoreProductsQuery({})
+type PropsType = {
+  storeId: string
+}
+
+const productPerPage = 24
+
+function StoreProducts(props: PropsType) {
+  const themeMode = useAppSelector(selectThemeMode)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const { storeId } = props
+
+  const allProducts = useGetStoreProductsQuery({
+    pageSize: storeId ? 0 : productPerPage,
+    page: currentPage,
+  })
+
+  const userProducts = useGetStoreProductsByUserIdQuery({
+    pageSize: storeId ? productPerPage : 0,
+    userId: storeId,
+    page: currentPage,
+  })
+
+  let error, isLoading, data
+
+  if (storeId) {
+    error = userProducts.error
+    isLoading = userProducts.isLoading
+    data = userProducts.data
+  } else {
+    error = allProducts.error
+    isLoading = allProducts.isLoading
+    data = allProducts.data
+  }
+
+  useEffect(() => {
+    if (data) {
+      setTotalPages(data.totalPageCount)
+      setCurrentPage(data.currentPage)
+    }
+  }, [data])
+
   const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
   const navMenuDrawerWidth = useAppSelector(selectFilterProductsDrawerWidth)
 
@@ -37,6 +82,23 @@ function StoreProducts() {
             <StoreProductCard storeProduct={storeProduct} />
           </Grid>
         ))}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: 3,
+            padding: 2,
+            width: '100%',
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(_, page) => setCurrentPage(page)}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
       </Grid>
 
       <FilterProductsDrawer />
