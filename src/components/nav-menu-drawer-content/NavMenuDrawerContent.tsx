@@ -13,6 +13,7 @@ import Toolbar from '@mui/material/Toolbar'
 
 import CopyRight from '../copy-right/CopyRight.tsx'
 import SwitchThemeMode from '../theme-mode-switch/ThemeModeSwitch.tsx'
+import NotLoggedInInfo from '../not-logged-in-info/NotLoggedInInfo.tsx'
 
 function NavMenuDrawerContent() {
   const navigate = useNavigate()
@@ -49,20 +50,24 @@ function NavMenuDrawerContent() {
       </List>
       <Divider />
       <Box flex={1}>
-        <List>
-          {privateMenus.map(({ link, to, icon }) => (
-            <ListItem
-              key={to}
-              disablePadding
-              onClick={() => handleListItemClick(to)}
-            >
-              <ListItemButton>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={link} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {privateMenus.length > 0 ? (
+          <List>
+            {privateMenus.map(({ link, to, icon }) => (
+              <ListItem
+                key={to}
+                disablePadding
+                onClick={() => handleListItemClick(to)}
+              >
+                <ListItemButton>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText primary={link} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <NotLoggedInInfo />
+        )}
       </Box>
       <Divider />
       <CopyRight />

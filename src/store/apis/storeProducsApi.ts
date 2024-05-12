@@ -19,6 +19,7 @@ const storeProductsApi = createApi({
     getStoreProducts: builder.query<
       ServiceCollectionResponse<StoreProductGetDto>,
       {
+        businessId?: string
         page?: number
         pageSize?: number
         nameQuery?: string

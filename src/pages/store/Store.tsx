@@ -201,7 +201,7 @@ function Store() {
           </Box>
         </Grid>
       </Grid>
-      <StoreProducts />
+      <StoreProducts storeId={storeId} />
     </Box>
   )
 }
