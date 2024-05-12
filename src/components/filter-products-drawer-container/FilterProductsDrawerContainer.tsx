@@ -24,7 +24,7 @@ function FilterProductsDrawerContainer() {
           keepMounted: true,
         }}
         sx={{
-          display: { xs: 'block', md: 'flex' },
+          display: { sm: 'block', md: 'flex' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: width,
@@ -38,7 +38,7 @@ function FilterProductsDrawerContainer() {
         variant='permanent'
         anchor='right'
         sx={{
-          display: { xs: 'none', md: 'flex' },
+          display: { xs: 'none', sm: 'flex' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: width,

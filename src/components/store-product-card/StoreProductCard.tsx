@@ -37,7 +37,7 @@ function StoreProductCard(props: PropType) {
 
   return (
     <Card sx={{ position: 'relative', paddingBottom: '24px' }}>
-      <Link to={`/business/${storeProduct.business.id}`}>
+      <Link to={`/store/${storeProduct.business.id}`}>
         <Typography
           variant='body1'
           color='textSecondary'
