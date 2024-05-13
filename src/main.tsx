@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import { BrowserRouter } from 'react-router-dom'
-import './assets/styles/global.css'
 import { Provider } from 'react-redux'
-import { store, persistor } from './store'
+import { BrowserRouter } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
+
+import App from './App.tsx'
+import { persistor, store } from './store'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

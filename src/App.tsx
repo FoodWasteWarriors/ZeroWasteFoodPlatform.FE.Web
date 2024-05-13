@@ -1,19 +1,17 @@
+import { Box, CssBaseline, ThemeProvider, Toolbar } from '@mui/material'
 import { useMemo } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Box, ThemeProvider, CssBaseline, Toolbar } from '@mui/material'
-import { useAppSelector } from './utils/hooks/reduxHooks'
+
 import mainTheme from './assets/theme/mainTheme'
-
-import StoreProducts from './pages/store-products/StoreProducts'
-import Login from './pages/login/Login'
 import Header from './components/header/Header'
-import NotFound from './pages/not-found/NotFound'
 import DrawerContainer from './components/nav-menu-drawer-container/NavMenuDrawerContainer'
-
-import './App.scss'
+import Login from './pages/login/Login'
+import NotFound from './pages/not-found/NotFound'
+import StoreProducts from './pages/store-products/StoreProducts'
+import Store from './pages/store/Store'
 import { selectNavMenuDrawer } from './store/features/nav-menu-drawer/navMenuDrawerSelectors'
 import { selectThemeMode } from './store/features/theme/themeSelectors'
-import Store from './pages/store/Store'
+import { useAppSelector } from './utils/hooks/reduxHooks'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -22,20 +20,18 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box display='flex'>
         <CssBaseline />
         <Header />
         <DrawerContainer />
 
         <Box
           component='main'
-          sx={{
-            flexGrow: 1,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-          }}
+          flexGrow={1}
+          width={{ sm: `calc(100% - ${drawerWidth}px)` }}
         >
           <Toolbar />
-          <Box sx={{ p: 3 }}>
+          <Box p={3}>
             <Routes>
               <Route path='/' element={<StoreProducts />} />
               <Route path='/login' element={<Login />} />

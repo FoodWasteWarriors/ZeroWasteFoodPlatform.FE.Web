@@ -1,32 +1,34 @@
-import {
-  useGetStoreProductsQuery,
-  useGetStoreProductsByUserIdQuery,
-} from '../../store/apis/storeProducsApi'
+import { Box, Grid, Pagination, styled } from '@mui/material'
+import { useEffect, useState } from 'react'
 import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
 import FilterProductsDrawer from '../../components/filter-products-drawer-container/FilterProductsDrawerContainer'
-import { Box, Grid, Pagination } from '@mui/material'
 import StoreProductCard from '../../components/store-product-card/StoreProductCard'
-import { useAppSelector } from '../../utils/hooks/reduxHooks'
-import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
-import { useState, useEffect } from 'react'
 import { useGetShoppingListQuery } from '../../store/apis/customerApi'
+import {
+  useGetStoreProductsByUserIdQuery,
+  useGetStoreProductsQuery,
+} from '../../store/apis/storeProducsApi'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
+import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
+import { useAppSelector } from '../../utils/hooks/reduxHooks'
 
 type PropsType = {
-  storeId: string | undefined
+  storeId: string
 }
 
 const productPerPage = 24
 
-function StoreProducts(props: PropsType) {
-  const { storeId } = props
-  const userId = useAppSelector(selectAuthUserId)
+function StoreProducts({ storeId }: PropsType) {
+  const loggedInUserId = useAppSelector(selectAuthUserId)
+  const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
+  const navMenuDrawerWidth = useAppSelector(selectFilterProductsDrawerWidth)
+
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
   let shoppingList = [] as StoreProductGetDto[] | null
 
-  const shoppingListData = useGetShoppingListQuery(userId!)
+  const shoppingListData = useGetShoppingListQuery(loggedInUserId!)
 
   if (shoppingListData.data) {
     shoppingList = shoppingListData.data.data
@@ -62,9 +64,6 @@ function StoreProducts(props: PropsType) {
     }
   }, [data])
 
-  const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
-  const navMenuDrawerWidth = useAppSelector(selectFilterProductsDrawerWidth)
-
   if (isLoading) return <div>Loading...</div>
 
   if (error) {
@@ -74,17 +73,9 @@ function StoreProducts(props: PropsType) {
 
   return (
     <Box>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          flexGrow: 1,
-          width: {
-            xs: '100%',
-            sm: `calc(130% - ${navMenuDrawerWidth}px)`,
-            md: `calc(100% - ${filterDrawerLength}px)`,
-          },
-        }}
+      <ProductsGrid
+        navMenuDrawerWidth={navMenuDrawerWidth}
+        filterDrawerLength={filterDrawerLength}
       >
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
@@ -96,15 +87,7 @@ function StoreProducts(props: PropsType) {
             />
           </Grid>
         ))}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: 3,
-            padding: 2,
-            width: '100%',
-          }}
-        >
+        <PaginationContainer>
           <Pagination
             count={totalPages}
             page={currentPage}
@@ -112,12 +95,41 @@ function StoreProducts(props: PropsType) {
             showFirstButton
             showLastButton
           />
-        </Box>
-      </Grid>
+        </PaginationContainer>
+      </ProductsGrid>
 
       <FilterProductsDrawer />
     </Box>
   )
+}
+
+const PaginationContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: theme.spacing(3),
+  padding: theme.spacing(2),
+  width: '100%',
+}))
+
+const ProductsGrid = (props: {
+  navMenuDrawerWidth: number
+  filterDrawerLength: number
+  children: React.ReactNode
+}) => {
+  const StyledGrid = styled(Grid)(({ theme }) => ({
+    flexGrow: 1,
+    [theme.breakpoints.up('xs')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(130% - ${props.navMenuDrawerWidth}px)`,
+    },
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${props.filterDrawerLength}px)`,
+    },
+  }))
+
+  return <StyledGrid spacing={2} container {...props} />
 }
 
 export default StoreProducts
