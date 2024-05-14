@@ -1,4 +1,4 @@
-import { Store } from '@mui/icons-material'
+import { Favorite, Store } from '@mui/icons-material'
 
 const loggedInUserActions = {
   // Menu items that do not require authentication
@@ -11,7 +11,13 @@ const loggedInUserActions = {
   ] as SideMenuItem[],
   Admin: [] as SideMenuItem[],
   Business: [] as SideMenuItem[],
-  Customer: [] as SideMenuItem[],
+  Customer: [
+    {
+      link: 'Shopping List',
+      to: '/shopping-list',
+      icon: <Favorite />,
+    },
+  ] as SideMenuItem[],
 }
 
 export default loggedInUserActions

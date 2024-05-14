@@ -2,17 +2,16 @@ import { useFormik } from 'formik'
 import { Button, TextField } from '@mui/material'
 import loginSchema from '../../utils/validation/loginSchema'
 import { useLoginUserMutation } from '../../store/apis/authApi'
-import { useAppDispatch } from '../../utils/hooks/reduxHooks'
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
 import { login } from '../../store/features/auth/authSlice'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
 
 function Login() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [loginUser] = useLoginUserMutation()
-  const [errMessages, setErrMessages] = useState<ResponseMessage[]>([])
-
   const onSubmit = (values: UserLoginDto) => {
     loginUser(values)
       .unwrap()
@@ -25,7 +24,6 @@ function Login() {
         setErrMessages(error.data.messages)
       })
   }
-
   const { handleSubmit, handleChange, values, touched, errors } = useFormik({
     initialValues: {
       email: '',
@@ -34,6 +32,14 @@ function Login() {
     validationSchema: loginSchema,
     onSubmit,
   })
+
+  const isLoggedIn = useAppSelector(selectAuthIsAuthenticated)
+
+  const [errMessages, setErrMessages] = useState<ResponseMessage[]>([])
+
+  if (isLoggedIn) {
+    return <Navigate to='/' />
+  }
 
   return (
     <form onSubmit={handleSubmit}>
