@@ -1,21 +1,16 @@
 import { Box } from '@mui/material'
-import { useParams } from 'react-router-dom'
-
-import StoreInfo from '../../components/store-info/StoreInfo'
-import StoreProductsGrid from '../../components/store-products-grid/StoreProductsGrid'
 import { useEffect, useState } from 'react'
-import { useGetStoreProductsByUserIdQuery } from '../../store/apis/storeProducsApi'
+import StoreProductsGrid from '../../components/store-products-grid/StoreProductsGrid'
+import { useGetStoreProductsQuery } from '../../store/apis/storeProducsApi'
 
-const productPerPage = 12
+const productPerPage = 24
 
-function Store() {
-  const { storeId } = useParams()
+function MainPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
-  const { data, error, isLoading } = useGetStoreProductsByUserIdQuery({
-    pageSize: storeId ? productPerPage : 0,
-    userId: storeId!,
+  const { data, error, isLoading } = useGetStoreProductsQuery({
+    pageSize: productPerPage,
     page: currentPage,
   })
 
@@ -27,7 +22,6 @@ function Store() {
 
   return (
     <Box>
-      <StoreInfo storeId={storeId!} />
       <StoreProductsGrid
         data={data}
         error={error}
@@ -40,4 +34,4 @@ function Store() {
   )
 }
 
-export default Store
+export default MainPage
