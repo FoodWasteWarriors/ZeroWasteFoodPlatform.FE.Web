@@ -1,17 +1,19 @@
 import { Box, CssBaseline, ThemeProvider, Toolbar } from '@mui/material'
 import { useMemo } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import mainTheme from './assets/theme/mainTheme'
 import Header from './components/header/Header'
 import DrawerContainer from './components/nav-menu-drawer-container/NavMenuDrawerContainer'
 import Login from './pages/login/Login'
 import NotFound from './pages/not-found/NotFound'
-import StoreProducts from './pages/main-page/MainPage'
+import MainPage from './pages/main-page/MainPage'
 import Store from './pages/store/Store'
 import { selectNavMenuDrawer } from './store/features/nav-menu-drawer/navMenuDrawerSelectors'
 import { selectThemeMode } from './store/features/theme/themeSelectors'
 import { useAppSelector } from './utils/hooks/reduxHooks'
+import ShoppingList from './pages/shopping-list/ShoppingList'
+import { IsAuthorized } from './utils/helpers/authHelper'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -33,9 +35,19 @@ function App() {
           <Toolbar />
           <Box p={3}>
             <Routes>
-              <Route path='/' element={<StoreProducts />} />
+              <Route path='/' element={<MainPage />} />
               <Route path='/login' element={<Login />} />
               <Route path='/store/:storeId' element={<Store />} />
+              <Route
+                path='/shopping-list'
+                element={
+                  IsAuthorized('/shopping-list') ? (
+                    <ShoppingList />
+                  ) : (
+                    <Navigate to='/login' />
+                  )
+                }
+              />
               <Route path='*' element={<NotFound />} />
             </Routes>
           </Box>

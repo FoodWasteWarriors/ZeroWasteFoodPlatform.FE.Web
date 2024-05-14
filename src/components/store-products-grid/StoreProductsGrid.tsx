@@ -47,8 +47,8 @@ function StoreProductsGrid({
   return (
     <Box>
       <ProductsGrid
-        navMenuDrawerWidth={navMenuDrawerWidth}
-        filterDrawerLength={filterDrawerLength}
+        navmenudrawerwidth={navMenuDrawerWidth}
+        filterdrawerlength={filterDrawerLength}
       >
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
@@ -85,8 +85,8 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }))
 
 const ProductsGrid = (props: {
-  navMenuDrawerWidth: number
-  filterDrawerLength: number
+  navmenudrawerwidth: number
+  filterdrawerlength: number
   children: React.ReactNode
 }) => {
   const StyledGrid = styled(Grid)(({ theme }) => ({
@@ -95,10 +95,10 @@ const ProductsGrid = (props: {
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: `calc(130% - ${props.navMenuDrawerWidth}px)`,
+      width: `calc(130% - ${props.navmenudrawerwidth}px)`,
     },
     [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${props.filterDrawerLength}px)`,
+      width: `calc(100% - ${props.filterdrawerlength}px)`,
     },
   }))
 
