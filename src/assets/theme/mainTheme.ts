@@ -34,11 +34,34 @@ const mainTheme = (mode: ThemeMode) =>
     },
 
     components: {
+      MuiGrid: {
+        styleOverrides: {
+          root: {
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+        },
+      },
       MuiMenuItem: {
         styleOverrides: {
           root: {
             whiteSpace: 'unset',
             wordBreak: 'break-all',
+          },
+        },
+      },
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            marginBottom: '16px',
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            margin: '16px 0',
+            alignItems: 'center',
           },
         },
       },
