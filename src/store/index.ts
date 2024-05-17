@@ -1,30 +1,31 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query'
 import { combineReducers } from 'redux'
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
-import { setupListeners } from '@reduxjs/toolkit/query'
-import storeProductsApi from './apis/storeProducsApi'
-import monitoredProductsApi from './apis/monitoredProducsApi'
 import authApi from './apis/authApi'
-import recommendationApi from './apis/recommendationApi'
 import businessApi from './apis/businessApi'
-import userApi from './apis/userApi'
+import categoryApi from './apis/categoryApi'
 import customerApi from './apis/customerApi'
+import monitoredProductsApi from './apis/monitoredProducsApi'
+import recommendationApi from './apis/recommendationApi'
 import reportApi from './apis/reportApi'
+import storeProductsApi from './apis/storeProducsApi'
+import userApi from './apis/userApi'
 
-import themeReducer from './features/theme/themeSlice'
-import navMenuDrawerReducer from './features/nav-menu-drawer/navMenuDrawerSlice'
-import filterProductsDrawerSlice from './features/filter-products-drawer/filterProductsDrawerSlice'
 import authReducer from './features/auth/authSlice'
+import filterProductsDrawerSlice from './features/filter-products-drawer/filterProductsDrawerSlice'
+import navMenuDrawerReducer from './features/nav-menu-drawer/navMenuDrawerSlice'
+import themeReducer from './features/theme/themeSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [customerApi.reducerPath]: customerApi.reducer,
   [reportApi.reducerPath]: reportApi.reducer,
+  [categoryApi.reducerPath]: categoryApi.reducer,
 })
 
 const persistConfig = {
@@ -55,6 +57,7 @@ const persistConfig = {
     userApi.reducerPath,
     customerApi.reducerPath,
     reportApi.reducerPath,
+    categoryApi.reducerPath,
   ],
 }
 
@@ -75,7 +78,8 @@ const store = configureStore({
       .concat(businessApi.middleware)
       .concat(userApi.middleware)
       .concat(customerApi.middleware)
-      .concat(reportApi.middleware),
+      .concat(reportApi.middleware)
+      .concat(categoryApi.middleware),
 })
 
 const persistor = persistStore(store)
