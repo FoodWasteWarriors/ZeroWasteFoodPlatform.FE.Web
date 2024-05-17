@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import loggedInUserActions from '../../constants/loggedInUserActions.tsx'
+import loggedInUserMenus from '../../constants/loggedInUserMenus.tsx'
 
 import { Box } from '@mui/system'
 import Divider from '@mui/material/Divider'
@@ -26,7 +26,7 @@ function NavMenuDrawerContent() {
   const handleListItemClick = (to: string) => navigate(to)
 
   useEffect(() => {
-    setPrivateMenus(userType ? loggedInUserActions[userType!] : [])
+    setPrivateMenus(userType ? loggedInUserMenus[userType!] : [])
   }, [userType])
 
   return (
@@ -40,7 +40,7 @@ function NavMenuDrawerContent() {
 
       <Divider />
       <List>
-        {loggedInUserActions.common.map(({ link, to, icon }) => (
+        {loggedInUserMenus.common.map(({ link, to, icon }) => (
           <ListItem
             key={to}
             disablePadding

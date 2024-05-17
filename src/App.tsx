@@ -14,6 +14,7 @@ import { selectThemeMode } from './store/features/theme/themeSelectors'
 import { useAppSelector } from './utils/hooks/reduxHooks'
 import ShoppingList from './pages/shopping-list/ShoppingList'
 import { IsAuthorized } from './utils/helpers/authHelper'
+import UserProfile from './pages/user-profile/UserProfile'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -37,6 +38,16 @@ function App() {
             <Routes>
               <Route path='/' element={<MainPage />} />
               <Route path='/login' element={<Login />} />
+              <Route
+                path='/profile/:userId'
+                element={
+                  IsAuthorized('/profile/:userId') ? (
+                    <UserProfile />
+                  ) : (
+                    <Navigate to='/login' />
+                  )
+                }
+              />
               <Route path='/store/:storeId' element={<Store />} />
               <Route
                 path='/shopping-list'

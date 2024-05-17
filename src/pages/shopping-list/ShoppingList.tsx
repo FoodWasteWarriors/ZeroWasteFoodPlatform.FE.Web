@@ -20,6 +20,7 @@ import { useMemo, useState } from 'react'
 import { useRemoveFromShoppingListMutation } from '../../store/apis/storeProducsApi'
 import { useNavigate } from 'react-router-dom'
 
+// TODO: Sort by discounted price and sort by store name not working
 function ShoppingList() {
   const userId = useAppSelector(selectAuthUserId)!
   const { data, error, isLoading } = useGetShoppingListQuery(userId)
@@ -55,8 +56,10 @@ function ShoppingList() {
   }, [data, orderBy, order])
 
   if (isLoading) return <div>Loading...</div>
+
   if (error)
     return <DefaultErrorMessage message='Error loading shopping list' />
+
   return (
     <Container>
       <Typography variant='h4' gutterBottom align='center' margin={2}>
