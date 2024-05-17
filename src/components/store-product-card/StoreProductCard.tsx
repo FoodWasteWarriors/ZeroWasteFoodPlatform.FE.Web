@@ -5,6 +5,7 @@ import {
   Typography,
   IconButton,
   Box,
+  styled,
 } from '@mui/material'
 import { getFinalPrice } from '../../utils/helpers/priceHelpers'
 import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
@@ -63,7 +64,7 @@ function StoreProductCard(props: PropType) {
     : null
 
   return (
-    <Card sx={{ position: 'relative', paddingBottom: '24px' }}>
+    <ProductCard>
       <Link to={`/store/${storeProduct.business.id}`}>
         <Typography
           variant='body1'
@@ -83,22 +84,10 @@ function StoreProductCard(props: PropType) {
         title={storeProduct.name}
       />
       {discountRate && (
-        <Box
-          sx={{
-            position: 'absolute',
-            fontSize: '15x',
-            top: '8px',
-            right: '8px',
-            backgroundColor: 'rgba(255, 00, 160, 0.7)',
-            color: 'white',
-            padding: '4px',
-            fontWeight: 'bold',
-            borderRadius: '4px',
-          }}
-        >
+        <DiscountRateContainer>
           <SellIcon fontSize='inherit' />
           {discountRate}
-        </Box>
+        </DiscountRateContainer>
       )}
       <CardContent>
         <Typography variant='h5' component='h2' fontSize={20}>
@@ -109,15 +98,7 @@ function StoreProductCard(props: PropType) {
             Expires In: {getFormattedDate(storeProduct.expirationDate)}
           </Typography>
         )}
-        <Box
-          fontSize={18}
-          sx={{
-            position: 'absolute',
-            bottom: '8px',
-            left: '15px',
-            display: 'flex',
-          }}
-        >
+        <LowerCardBody>
           <Typography
             variant='h6'
             color='textSecondary'
@@ -136,24 +117,61 @@ function StoreProductCard(props: PropType) {
           >
             ${finalPrice.toFixed(2)}
           </Typography>
-        </Box>
+        </LowerCardBody>
       </CardContent>
-      <IconButton
-        style={{
-          position: 'absolute',
-          bottom: '2px',
-          right: '8px',
-          color: isFavorite ? 'red' : 'silver',
-        }}
-        aria-label='favorite'
-        onClick={() => handleFavoriteClick()}
-      >
+      <FavIconButton isFavorite={isFavorite} onClick={handleFavoriteClick}>
         <Favorite />
-      </IconButton>
+      </FavIconButton>
 
       <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
-    </Card>
+    </ProductCard>
   )
 }
+
+const ProductCard = styled(Card)(() => ({
+  paddingBottom: '24px',
+  position: 'relative',
+  '&:hover': {
+    boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.2)',
+  },
+}))
+
+const FavIconButton = (props: {
+  isFavorite: boolean | undefined
+  children: React.ReactNode
+  onClick: () => void
+}) => {
+  const StyledIconButton = styled(IconButton)(() => ({
+    position: 'absolute',
+    bottom: '2px',
+    right: '8px',
+    color: props.isFavorite ? 'red' : 'silver',
+  }))
+
+  return (
+    <StyledIconButton aria-label='favorite' onClick={props.onClick}>
+      {props.children}
+    </StyledIconButton>
+  )
+}
+
+const LowerCardBody = styled(Box)(() => ({
+  position: 'absolute',
+  bottom: '8px',
+  left: '15px',
+  display: 'flex',
+  fontSize: '18px',
+}))
+
+const DiscountRateContainer = styled(Box)(() => ({
+  position: 'absolute',
+  top: '8px',
+  right: '8px',
+  backgroundColor: 'rgba(255, 00, 160, 0.7)',
+  color: 'white',
+  padding: '4px',
+  fontWeight: 'bold',
+  borderRadius: '4px',
+}))
 
 export default StoreProductCard
