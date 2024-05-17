@@ -1,6 +1,6 @@
 import { Favorite, Store } from '@mui/icons-material'
 
-const loggedInUserActions = {
+const loggedInUserMenus = {
   // Menu items that do not require authentication
   common: [
     {
@@ -20,4 +20,4 @@ const loggedInUserActions = {
   ] as SideMenuItem[],
 }
 
-export default loggedInUserActions
+export default loggedInUserMenus

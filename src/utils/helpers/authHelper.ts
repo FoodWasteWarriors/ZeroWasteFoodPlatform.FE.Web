@@ -1,4 +1,4 @@
-import loggedInUserActions from '../../constants/loggedInUserActions'
+import roleAccesses from '../../constants/roleAccesses'
 import { selectAuthUserType } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../hooks/reduxHooks'
 
@@ -7,7 +7,7 @@ export function IsAuthorized(path: string) {
 
   if (!userRole) return false
 
-  const accessibleMenus = loggedInUserActions[userRole] as SideMenuItem[]
+  const accessibleMenus = roleAccesses[userRole] as string[]
 
-  return accessibleMenus.some((menu) => menu.to === path)
+  return accessibleMenus.includes(path)
 }
