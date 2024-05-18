@@ -72,7 +72,7 @@ const mainTheme = (mode: ThemeMode) =>
       MuiGrid: {
         styleOverrides: {
           item: {
-            padding: '8px',
+            padding: '8px !important',
           },
         },
       },
