@@ -126,7 +126,7 @@ function StoreProductCard(props: PropType) {
           </Typography>
         </LowerCardBody>
       </CardContent>
-
+      
       {role === UserRoles.Customer && (
         <IconButtonContainer
           isFavorite={isFavorite}

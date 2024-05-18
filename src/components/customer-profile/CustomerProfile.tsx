@@ -87,7 +87,6 @@ function CustomerProfile() {
       })
       .catch((error) => {
         let errorMessages
-
         if (!error.data.messages) {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {

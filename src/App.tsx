@@ -50,7 +50,6 @@ function App() {
                   )
                 }
               />
-              <Route path='/register' element={<Register />} />
               <Route path='/store/:storeId' element={<Store />} />
               <Route path='/my-products' element={<Store />} />
               <Route
