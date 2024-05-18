@@ -1,95 +1,176 @@
-import { useFormik } from 'formik'
-import { Button, TextField, Grid, Box, Typography } from '@mui/material'
-import loginSchema from '../../utils/validation/loginSchema'
+import {
+  Button,
+  TextField,
+  Grid,
+  Typography,
+  Container,
+  Switch,
+  FormControlLabel,
+  Stack,
+  Alert,
+  Snackbar,
+  List,
+  ListItem,
+} from '@mui/material'
 import { useLoginUserMutation } from '../../store/apis/authApi'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
-import { login } from '../../store/features/auth/authSlice'
 import { useState } from 'react'
 import { Navigate, useNavigate, Link } from 'react-router-dom'
 import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
-
+import { login } from '../../store/features/auth/authSlice'
 
 function Login() {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const [loginUser] = useLoginUserMutation()
-  
+  const dispatch = useAppDispatch()
+  const [loginUserMutation] = useLoginUserMutation()
+  const [success, setSuccess] = useState(false)
+  const [errors, setErrors] = useState([] as string[])
+  const [useEmail, setUseEmail] = useState(false) // Add this line
+  const [loginData, setLoginData] = useState<UserLoginDto>({
+    username: null,
+    email: null,
+    password: '',
+  })
+
   const onSubmit = (values: UserLoginDto) => {
-    loginUser(values)
+    // Modify this line to use either username or email based on the switch
+    const loginValues = useEmail
+      ? ({ email: values.email, password: values.password } as UserLoginDto)
+      : ({
+          username: values.username,
+          password: values.password,
+        } as UserLoginDto)
+
+    loginUserMutation(loginValues)
       .unwrap()
-      .then((response) => {
-        dispatch(login(response!.data!))
-        setErrMessages([])
+      .then((res) => {
+        setSuccess(true)
+        setErrors([])
+        dispatch(login(res!.data!))
         navigate('/')
       })
       .catch((error) => {
-        setErrMessages(error.data.messages)
+        let errorMessages
+
+        if (!error.data.messages) {
+          errorMessages = Object.values(error.data.errors).flat() as string[]
+        } else {
+          errorMessages = error.data.messages.map(
+            (message: ResponseMessage) => message.description
+          )
+        }
+
+        setErrors(errorMessages)
+        setSuccess(false)
       })
   }
-  const { handleSubmit, handleChange, values, touched, errors } = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: loginSchema,
-    onSubmit,
-  })
 
   const isLoggedIn = useAppSelector(selectAuthIsAuthenticated)
-
-  const [errMessages, setErrMessages] = useState<ResponseMessage[]>([])
 
   if (isLoggedIn) {
     return <Navigate to='/' />
   }
 
+  // Add this to your form
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        style={{ minHeight: '100vh' }}
-      >
-        <Box component="form" onSubmit={handleSubmit} width="100%" maxWidth={500}>
-          <TextField
-            id='email'
-            name='email'
-            label='Email'
-            value={values.email}
-            onChange={handleChange}
-            error={touched.email && Boolean(errors.email)}
-            helperText={touched.email && errors.email}
-            fullWidth
-            sx={{ mb: 2 }}
+    <Container
+      component='main'
+      sx={{
+        height: 'calc(100vh - 200px)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Typography variant='h4' align='center' mt={3} mb={3}>
+        Login
+      </Typography>
+
+      <Stack spacing={2} direction={'column'} component='form'>
+        <Stack spacing={2} direction={'row'}>
+          {useEmail ? (
+            <TextField
+              required
+              variant='filled'
+              fullWidth
+              label='Email'
+              name='email'
+              onChange={(e) =>
+                setLoginData({ ...loginData, email: e.target.value })
+              }
+            />
+          ) : (
+            <TextField
+              variant='filled'
+              required
+              fullWidth
+              label='Username'
+              name='username'
+              onChange={(e) =>
+                setLoginData({ ...loginData, username: e.target.value })
+              }
+            />
+          )}
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={useEmail}
+                onChange={() => setUseEmail(!useEmail)}
+              />
+            }
+            label='Use Email'
           />
+        </Stack>
+
+        <Grid item xs={12}>
           <TextField
-            id='password'
-            name='password'
+            variant='filled'
+            required
+            fullWidth
             label='Password'
+            name='password'
             type='password'
-            value={values.password}
-            onChange={handleChange}
-            error={touched.password && Boolean(errors.password)}
-            helperText={touched.password && errors.password}
-            fullWidth
-            sx={{ mb: 2 }}
+            onChange={(e) =>
+              setLoginData({ ...loginData, password: e.target.value })
+            }
           />
-          <Button type='submit' variant='contained' color='primary'>
-            Login
-          </Button>
+        </Grid>
 
-          {errMessages.map((message, index) => (
-            <div key={index}>{message.description}</div>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => onSubmit(loginData)}
+        >
+          Login
+        </Button>
+
+        <Grid container justifyContent='flex-end'>
+          <Grid item>
+            <Link to='/register'>Don't have an account? Register</Link>
+          </Grid>
+        </Grid>
+
+        <Snackbar open={success} autoHideDuration={6000}>
+          <Alert
+            severity='success'
+            variant='filled'
+            sx={{ width: '100%' }}
+            onClose={() => setSuccess(false)}
+          >
+            User details updated successfully!
+          </Alert>
+        </Snackbar>
+        <List>
+          {errors.map((error, index) => (
+            <ListItem key={index}>
+              <Typography color='error'>{error}</Typography>
+            </ListItem>
           ))}
-
-          <Typography variant="body1">
-            Don't have an account? <Link to="/register">Register</Link>
-          </Typography>
-        </Box>
-      </Grid>
-    </form>
+        </List>
+      </Stack>
+    </Container>
   )
 }
 
