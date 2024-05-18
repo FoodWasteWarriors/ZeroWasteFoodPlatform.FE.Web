@@ -1,13 +1,11 @@
 import { Avatar, Box, styled, Typography } from '@mui/material'
 import { selectAuthUser } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
-import UserRoles from '../../constants/userRoles'
 import { useNavigate } from 'react-router-dom'
 
 function ProfileSection() {
   const user = useAppSelector(selectAuthUser)!
   const navigate = useNavigate()
-  let photoUrl = ''
 
   const handleProfileClick = () => {
     navigate(`/profile/${user.id}`)
@@ -15,19 +13,9 @@ function ProfileSection() {
 
   const { username, role } = user
 
-  if (role == UserRoles.Customer) {
-    photoUrl = (user as CustomerGetDto).avatar
-  } else if (role == UserRoles.Business) {
-    photoUrl = (user as BusinessGetDto).logo
-  }
-
   return (
     <SectionContainer onClick={handleProfileClick}>
-      <Avatar
-        alt={username}
-        src={photoUrl}
-        sx={{ width: 60, height: 60, my: 1 }}
-      />
+      <StyledAvatar alt={username} />
 
       <Box marginTop={1} fontWeight='bold'>
         {username}
@@ -47,6 +35,12 @@ const SectionContainer = styled(Box)(() => ({
   justifyContent: 'center',
   padding: '1rem',
   cursor: 'pointer',
+}))
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  width: 60,
+  height: 60,
+  margin: theme.spacing(1),
 }))
 
 export default ProfileSection

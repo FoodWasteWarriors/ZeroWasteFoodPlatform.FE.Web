@@ -13,13 +13,14 @@ import { Favorite } from '@mui/icons-material'
 import SellIcon from '@mui/icons-material/Sell'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
+import { selectAuthUserType } from '../../store/features/auth/authSelectors'
 import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import {
   useAddToShoppingListMutation,
   useRemoveFromShoppingListMutation,
 } from '../../store/apis/storeProducsApi'
+import UserRoles from '../../constants/userRoles'
 
 type PropType = {
   storeProduct: StoreProductGetDto
@@ -30,7 +31,7 @@ function StoreProductCard(props: PropType) {
   const { storeProduct, inTheShoppingList } = props
   const [isFavorite, setIsFavorite] = useState(inTheShoppingList)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const isAuthenticated = useAppSelector(selectAuthIsAuthenticated)
+  const role = useAppSelector(selectAuthUserType)
 
   const finalPrice = getFinalPrice(
     storeProduct.originalPrice,
@@ -45,7 +46,7 @@ function StoreProductCard(props: PropType) {
   }, [inTheShoppingList])
 
   const handleFavoriteClick = () => {
-    if (!isAuthenticated) {
+    if (!role) {
       setIsDialogOpen(true)
       return
     }
@@ -119,9 +120,12 @@ function StoreProductCard(props: PropType) {
           </Typography>
         </LowerCardBody>
       </CardContent>
-      <FavIconButton isFavorite={isFavorite} onClick={handleFavoriteClick}>
-        <Favorite />
-      </FavIconButton>
+
+      {role === UserRoles.Customer && (
+        <FavIconButton isFavorite={isFavorite} onClick={handleFavoriteClick}>
+          <Favorite />
+        </FavIconButton>
+      )}
 
       <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </ProductCard>
