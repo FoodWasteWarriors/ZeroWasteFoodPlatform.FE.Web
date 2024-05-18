@@ -54,7 +54,7 @@ function StoreProductsGrid({
         filterdrawerlength={rightDrawerLength}
       >
         {data?.data?.map((storeProduct) => (
-          <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
+          <Grid item xs={12} md={6} lg={4} xl={2} key={storeProduct.id}>
             <StoreProductCard
               isMyStore={isMyStore}
               storeProduct={storeProduct}
@@ -104,14 +104,14 @@ const ProductsGrid = (props: {
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100vw   - ${props.filterdrawerlength}px)`,
+      width: `calc(100%  - ${props.filterdrawerlength}px)`,
     },
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${props.filterdrawerlength}px)`,
     },
   }))
 
-  return <StyledGrid spacing={2} container {...props} />
+  return <StyledGrid container {...props} />
 }
 
 export default StoreProductsGrid

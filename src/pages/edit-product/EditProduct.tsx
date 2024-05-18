@@ -150,7 +150,7 @@ function EditProduct() {
   }
 
   return (
-    <Container>
+    <Container sx={{ padding: 4 }}>
       <Stack alignItems='center' spacing={2} my={2}>
         <Avatar
           src={productDetails.photo}

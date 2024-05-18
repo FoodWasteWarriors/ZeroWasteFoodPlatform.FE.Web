@@ -20,7 +20,6 @@ import { selectAuthUserType } from '../../store/features/auth/authSelectors'
 import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
 import { getFinalPrice } from '../../utils/helpers/priceHelpers'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
-import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
 
 type PropType = {
   storeProduct: StoreProductGetDto
@@ -31,7 +30,6 @@ type PropType = {
 function StoreProductCard(props: PropType) {
   const { storeProduct, inTheShoppingList, isMyStore } = props
   const [isFavorite, setIsFavorite] = useState(inTheShoppingList)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const role = useAppSelector(selectAuthUserType)
   const navigate = useNavigate()
 
@@ -49,7 +47,6 @@ function StoreProductCard(props: PropType) {
 
   const handleFavoriteClick = () => {
     if (!role) {
-      setIsDialogOpen(true)
       return
     }
 
@@ -126,7 +123,7 @@ function StoreProductCard(props: PropType) {
           </Typography>
         </LowerCardBody>
       </CardContent>
-      
+
       {role === UserRoles.Customer && (
         <IconButtonContainer
           isFavorite={isFavorite}
@@ -141,8 +138,6 @@ function StoreProductCard(props: PropType) {
           <Edit />
         </IconButtonContainer>
       )}
-
-      <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </ProductCard>
   )
 }
