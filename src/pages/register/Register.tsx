@@ -6,17 +6,19 @@ import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
+import UserRoles from '../../constants/userRoles';
+import { SelectChangeEvent } from '@mui/material/Select';
 
 function Register() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const [registerBusiness] = useRegisterBusinessMutation()
     const [registerCustomer] = useRegisterCustomerMutation()
-    const [userType, setUserType] = useState<'customer' | 'business'>('customer')
+    const [role, setRole] = useState<UserRoles>(UserRoles.Customer);
 
-    const handleUserTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setUserType(event.target.value as 'customer' | 'business')
-    }
+    const handleRoleChange = (event: SelectChangeEvent<UserRoles>) => {
+        setRole(event.target.value as UserRoles);
+    };
 
     const onSubmitCustomer = (values: CustomerRegisterDto) => {
         registerCustomer(values)
@@ -45,7 +47,7 @@ function Register() {
     }
 
     const { handleSubmit, handleChange, values, touched, errors } = useFormik({
-        initialValues: userType === 'customer' ? {
+        initialValues: role === UserRoles.Customer ? {
             username: '',
             email: '',
             phoneNumber: '',
@@ -67,13 +69,13 @@ function Register() {
         },
         validationSchema: registerSchema,
         onSubmit: (values) => {
-            if (userType === 'customer') {
+            if (role === UserRoles.Customer) {
                 onSubmitCustomer(values as CustomerRegisterDto);
             } else {
                 onSubmitBusiness(values as BusinessRegisterDto);
             }
         },
-    })
+    });
 
     const isLoggedIn = useAppSelector(selectAuthIsAuthenticated)
 
@@ -98,13 +100,12 @@ function Register() {
                     padding: 2,
                 }}
             >
-                <Select
-                    value={userType}
-                    onChange={handleUserTypeChange}
-                >
-                    <MenuItem value={'customer'}>Customer</MenuItem>
-                    <MenuItem value={'business'}>Business</MenuItem>
+            <Grid container justifyContent="center">
+                <Select value={role} onChange={handleRoleChange}>
+                    <MenuItem value={UserRoles.Customer}>{UserRoles.Customer}</MenuItem>
+                    <MenuItem value={UserRoles.Business}>{UserRoles.Business}</MenuItem>
                 </Select>
+            </Grid>
                 <form onSubmit={handleSubmit}>
                     <TextField
                         id='username'
@@ -143,7 +144,7 @@ function Register() {
                         error={touched.password && Boolean(errors.password)}
                         helperText={touched.password && errors.password}
                     />
-                    {userType === 'customer' && (
+                    {role === UserRoles.Customer && (
                         <>
                             <TextField
                                 id='firstName'
@@ -167,7 +168,7 @@ function Register() {
                                 id='avatar'
                                 name='avatar'
                                 label='Avatar'
-                                value={values.lastName}
+                                value={values.avatar}
                                 onChange={handleChange}
                                 error={touched.avatar && Boolean(errors.avatar)}
                                 helperText={touched.avatar && errors.avatar}
@@ -175,7 +176,7 @@ function Register() {
                         </>
                     )}
 
-                    {userType === 'business' && (
+                    {role === UserRoles.Business && (
                         <>
                             <TextField
                                 id='address'

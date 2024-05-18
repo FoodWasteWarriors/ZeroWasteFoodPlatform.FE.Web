@@ -1,19 +1,18 @@
 import { useFormik } from 'formik'
-import { Button, TextField, Grid, Box, Typography } from '@mui/material'
+import { Button, TextField, Box, Container, Alert, Typography } from '@mui/material'
 import loginSchema from '../../utils/validation/loginSchema'
 import { useLoginUserMutation } from '../../store/apis/authApi'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
 import { login } from '../../store/features/auth/authSlice'
 import { useState } from 'react'
-import { Navigate, useNavigate, Link } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
-
+import { Link as RouterLink } from 'react-router-dom';
 
 function Login() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [loginUser] = useLoginUserMutation()
-  
   const onSubmit = (values: UserLoginDto) => {
     loginUser(values)
       .unwrap()
@@ -44,52 +43,53 @@ function Login() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        style={{ minHeight: '100vh' }}
-      >
-        <Box component="form" onSubmit={handleSubmit} width="100%" maxWidth={500}>
-          <TextField
-            id='email'
-            name='email'
-            label='Email'
-            value={values.email}
-            onChange={handleChange}
-            error={touched.email && Boolean(errors.email)}
-            helperText={touched.email && errors.email}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            id='password'
-            name='password'
-            label='Password'
-            type='password'
-            value={values.password}
-            onChange={handleChange}
-            error={touched.password && Boolean(errors.password)}
-            helperText={touched.password && errors.password}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <Button type='submit' variant='contained' color='primary'>
-            Login
-          </Button>
+    <Container maxWidth="sm">
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 2, // space between items
+      }}
+    >
+      <TextField
+        id='email'
+        name='email'
+        label='Email'
+        value={values.email}
+        onChange={handleChange}
+        error={touched.email && Boolean(errors.email)}
+        helperText={touched.email && errors.email}
+        fullWidth
+      />
+      <TextField
+        id='password'
+        name='password'
+        label='Password'
+        type='password'
+        value={values.password}
+        onChange={handleChange}
+        error={touched.password && Boolean(errors.password)}
+        helperText={touched.password && errors.password}
+        fullWidth
+      />
+      <Button type='submit' variant='contained' fullWidth>
+        Login
+      </Button>
 
-          {errMessages.map((message, index) => (
-            <div key={index}>{message.description}</div>
-          ))}
+      <Typography variant="body2">
+        Don't have an account? <RouterLink to="/register">Register</RouterLink>
+      </Typography>
 
-          <Typography variant="body1">
-            Don't have an account? <Link to="/register">Register</Link>
-          </Typography>
-        </Box>
-      </Grid>
-    </form>
+      {errMessages.map((message, index) => (
+        <Alert severity="error" key={index}>
+          {message.description}
+        </Alert>
+      ))}
+    </Box>
+  </Container>
   )
 }
 
