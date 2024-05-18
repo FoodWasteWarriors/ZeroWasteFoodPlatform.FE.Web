@@ -45,7 +45,7 @@ function ChangeUserPassword() {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {
           errorMessages = error.data.messages.map(
-            (message: any) => message.description
+            (message: ResponseMessage) => message.description
           )
         }
 

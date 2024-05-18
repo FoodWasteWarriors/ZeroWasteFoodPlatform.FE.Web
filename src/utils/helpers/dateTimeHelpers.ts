@@ -24,7 +24,7 @@ export function getCurrentTime(): string {
   return `${hours}:${minutes}:${seconds}`
 }
 
-export function getFormattedDate(date: string): string {
+export function getFormattedDate(date: Date): string {
   const dateObj = new Date(date)
   const year = dateObj.getFullYear()
   const month = String(dateObj.getMonth() + 1).padStart(2, '0')

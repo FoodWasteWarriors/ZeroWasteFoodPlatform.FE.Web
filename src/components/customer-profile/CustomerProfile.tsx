@@ -1,4 +1,4 @@
-import { Edit } from '@mui/icons-material'
+import { Edit, Save } from '@mui/icons-material'
 import {
   Alert,
   Avatar,
@@ -94,7 +94,7 @@ function CustomerProfile() {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {
           errorMessages = error.data.messages.map(
-            (message: any) => message.description
+            (message: ResponseMessage) => message.description
           )
         }
 
@@ -108,6 +108,32 @@ function CustomerProfile() {
   const handleCancelUpdate = () => {
     SetDefaluts()
     setActiveEdits(defaultActiveEdits)
+  }
+
+  const EditOrSaveButton = (activeEditKey: keyof typeof defaultActiveEdits) => {
+    const activeEdit = activeEdits[activeEditKey]
+
+    return activeEdit ? (
+      <Save
+        sx={{ cursor: 'pointer', marginLeft: 1 }}
+        onClick={() => {
+          setActiveEdits((prev) => ({
+            ...prev,
+            [activeEditKey]: false,
+          }))
+        }}
+      />
+    ) : (
+      <Edit
+        sx={{ cursor: 'pointer', marginLeft: 1 }}
+        onClick={() => {
+          setActiveEdits((prev) => ({
+            ...prev,
+            [activeEditKey]: true,
+          }))
+        }}
+      />
+    )
   }
 
   useEffect(() => {
@@ -151,17 +177,7 @@ function CustomerProfile() {
           }}
           fullWidth
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    username: !prev.username,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('username'),
           }}
         />
         <TextField
@@ -181,17 +197,7 @@ function CustomerProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    email: !prev.email,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('email'),
           }}
         />
         <TextField
@@ -211,17 +217,7 @@ function CustomerProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    phoneNumber: !prev.phoneNumber,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('phoneNumber'),
           }}
         />
         <Box display='flex' alignItems='center'>
@@ -243,16 +239,7 @@ function CustomerProfile() {
             }
           />
 
-          <Edit
-            sx={{ cursor: 'pointer' }}
-            onClick={() => {
-              setActiveEdits((prev) => ({
-                ...prev,
-                useMultiFactorAuthentication:
-                  !prev.useMultiFactorAuthentication,
-              }))
-            }}
-          />
+          {EditOrSaveButton('useMultiFactorAuthentication')}
         </Box>
 
         <Stack

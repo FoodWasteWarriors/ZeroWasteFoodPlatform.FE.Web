@@ -26,9 +26,11 @@ function StoreProductsGrid({
   totalPages,
   setCurrentPage,
 }: PropsType) {
+  const fullUrl = window.location.href
   const loggedInUserId = useAppSelector(selectAuthUserId)
   const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
   const navMenuDrawerWidth = useAppSelector(selectFilterProductsDrawerWidth)
+  const isMyStore = fullUrl.includes('my-products')
 
   let shoppingList = [] as StoreProductGetDto[] | null
 
@@ -53,6 +55,7 @@ function StoreProductsGrid({
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
             <StoreProductCard
+              isMyStore={isMyStore}
               storeProduct={storeProduct}
               inTheShoppingList={shoppingList?.some(
                 (p) => p.id === storeProduct.id
@@ -71,7 +74,7 @@ function StoreProductsGrid({
         </PaginationContainer>
       </ProductsGrid>
 
-      <FilterProductsDrawerContainer />
+      {!isMyStore && <FilterProductsDrawerContainer />}
     </Box>
   )
 }

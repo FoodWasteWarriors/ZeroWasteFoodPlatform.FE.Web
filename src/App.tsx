@@ -15,6 +15,7 @@ import { useAppSelector } from './utils/hooks/reduxHooks'
 import ShoppingList from './pages/shopping-list/ShoppingList'
 import { IsAuthorized } from './utils/helpers/authHelper'
 import UserProfile from './pages/user-profile/UserProfile'
+import EditProduct from './pages/edit-product/EditProduct'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -49,6 +50,11 @@ function App() {
                 }
               />
               <Route path='/store/:storeId' element={<Store />} />
+              <Route path='/my-products' element={<Store />} />
+              <Route
+                path='/edit-product/:productId'
+                element={<EditProduct />}
+              />
               <Route
                 path='/shopping-list'
                 element={

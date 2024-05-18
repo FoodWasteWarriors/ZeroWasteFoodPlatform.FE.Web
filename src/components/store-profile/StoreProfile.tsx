@@ -1,4 +1,4 @@
-import { Edit } from '@mui/icons-material'
+import { Edit, Save } from '@mui/icons-material'
 import {
   Alert,
   Avatar,
@@ -107,7 +107,7 @@ function StoreProfile() {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {
           errorMessages = error.data.messages.map(
-            (message: any) => message.description
+            (message: ResponseMessage) => message.description
           )
         }
 
@@ -121,6 +121,32 @@ function StoreProfile() {
   const handleCancleUpdate = () => {
     SetDefaluts()
     setActiveEdits(defaultActiveEdits)
+  }
+
+  const EditOrSaveButton = (activeEditKey: keyof typeof defaultActiveEdits) => {
+    const activeEdit = activeEdits[activeEditKey]
+
+    return activeEdit ? (
+      <Save
+        sx={{ cursor: 'pointer', marginLeft: 1 }}
+        onClick={() => {
+          setActiveEdits((prev) => ({
+            ...prev,
+            [activeEditKey]: false,
+          }))
+        }}
+      />
+    ) : (
+      <Edit
+        sx={{ cursor: 'pointer', marginLeft: 1 }}
+        onClick={() => {
+          setActiveEdits((prev) => ({
+            ...prev,
+            [activeEditKey]: true,
+          }))
+        }}
+      />
+    )
   }
 
   useEffect(() => {
@@ -191,17 +217,7 @@ function StoreProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    address: !prev.address,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('address'),
           }}
         />
 
@@ -218,17 +234,7 @@ function StoreProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    description: !prev.description,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('description'),
           }}
         />
 
@@ -249,17 +255,7 @@ function StoreProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    email: !prev.email,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('email'),
           }}
         />
         <TextField
@@ -279,17 +275,7 @@ function StoreProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    phoneNumber: !prev.phoneNumber,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('phoneNumber'),
           }}
         />
 
@@ -305,17 +291,7 @@ function StoreProfile() {
             }))
           }}
           InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
-                    ...prev,
-                    website: !prev.website,
-                  }))
-                }}
-              />
-            ),
+            endAdornment: EditOrSaveButton('website'),
           }}
         />
 
@@ -338,16 +314,7 @@ function StoreProfile() {
             }
           />
 
-          <Edit
-            sx={{ cursor: 'pointer' }}
-            onClick={() => {
-              setActiveEdits((prev) => ({
-                ...prev,
-                useMultiFactorAuthentication:
-                  !prev.useMultiFactorAuthentication,
-              }))
-            }}
-          />
+          {EditOrSaveButton('useMultiFactorAuthentication')}
         </Box>
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
