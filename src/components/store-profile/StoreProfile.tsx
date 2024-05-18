@@ -6,41 +6,48 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  List,
+  ListItem,
   Snackbar,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import { Fragment, useCallback, useEffect, useState } from 'react'
-import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
-import {
-  useGetCustomerByIdQuery,
-  useUpdateCustomerMutation,
-} from '../../store/apis/customerApi'
+import DefaultErrorMessage from '../default-error-message/DefaultErrorMessage'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
+import {
+  useGetBusinessByIdQuery,
+  useUpdateBusinessMutation,
+} from '../../store/apis/businessApi'
 
 const defaultActiveEdits = {
+  name: false,
+  description: false,
   username: false,
   email: false,
   phoneNumber: false,
   useMultiFactorAuthentication: false,
-  avatar: false,
+  logo: false,
+  coverPhoto: false,
+  website: false,
+  address: false,
 }
 
-// TODO: Enable to change avatar
-function CustomerProfile() {
+// TODO: Enable to change cover photo and logo
+function StoreProfile() {
   const userId = useAppSelector(selectAuthUserId)!
-  const { data, error, isLoading } = useGetCustomerByIdQuery(userId)
+  const { data, error, isLoading } = useGetBusinessByIdQuery(userId)
   const [success, setSuccess] = useState(false)
   const [errors, setErrors] = useState([] as string[])
-  const [updateCustomer] = useUpdateCustomerMutation()
+  const [updateBusiness] = useUpdateBusinessMutation()
 
   const [activeEdits, setActiveEdits] = useState(defaultActiveEdits)
 
   const [userDetails, setUserDetails] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
+    description: '' as string | null | undefined,
     username: '',
     email: '',
     phoneNumber: '',
@@ -48,14 +55,17 @@ function CustomerProfile() {
     emailVerified: false,
     phoneNumberVerified: false,
     lastLoginTime: '',
-    avatar: '',
+    logo: '',
+    address: '',
+    coverPhoto: '' as string | null | undefined,
+    website: '' as string | null | undefined,
     role: null as UserRole,
   })
 
   const SetDefaluts = useCallback(() => {
     setUserDetails({
-      firstName: data!.data!.firstName,
-      lastName: data!.data!.lastName,
+      name: data!.data!.name,
+      description: data!.data!.description,
       username: data!.data!.username,
       email: data!.data!.email,
       phoneNumber: data!.data!.phoneNumber,
@@ -63,21 +73,26 @@ function CustomerProfile() {
       emailVerified: data!.data!.emailVerified,
       phoneNumberVerified: data!.data!.phoneNumberVerified,
       lastLoginTime: data!.data!.lastLoginTime,
-      avatar: data!.data!.avatar,
+      logo: data!.data!.logo,
+      coverPhoto: data!.data!.coverPhoto,
+      website: data!.data!.website,
       role: data!.data!.role!,
+      address: data!.data!.address,
     })
   }, [data])
 
   const handleUserUpdate = () => {
-    updateCustomer({
+    updateBusiness({
       id: userId,
-      firstName: userDetails.firstName,
-      lastName: userDetails.lastName,
+      name: userDetails.name,
+      description: userDetails.description,
       username: userDetails.username,
       email: userDetails.email,
       phoneNumber: userDetails.phoneNumber,
       useMultiFactorAuthentication: userDetails.useMultiFactorAuthentication,
-      avatar: userDetails.avatar,
+      coverPhoto: userDetails.coverPhoto,
+      website: userDetails.website,
+      address: userDetails.address,
     })
       .unwrap()
       .then(() => {
@@ -87,6 +102,7 @@ function CustomerProfile() {
       })
       .catch((error) => {
         let errorMessages
+
         if (!error.data.messages) {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {
@@ -102,7 +118,7 @@ function CustomerProfile() {
     setActiveEdits(defaultActiveEdits)
   }
 
-  const handleCancelUpdate = () => {
+  const handleCancleUpdate = () => {
     setErrors([])
     SetDefaluts()
     setActiveEdits(defaultActiveEdits)
@@ -147,12 +163,12 @@ function CustomerProfile() {
     <Fragment>
       <Stack alignItems='center' spacing={2} my={2}>
         <Avatar
-          src={userDetails.avatar}
+          src={userDetails.logo}
           alt={userDetails.username}
           sx={{ width: 100, height: 100 }}
         />
         <Typography variant='h4' style={{ marginTop: 10 }}>
-          {`${userDetails.firstName} ${userDetails.lastName}`}
+          {`${userDetails.name}`}
         </Typography>
 
         <Typography variant='h6'>{userDetails.role}</Typography>
@@ -175,9 +191,54 @@ function CustomerProfile() {
           }}
           fullWidth
           InputProps={{
-            endAdornment: EditOrSaveButton('username'),
+            endAdornment: (
+              <Edit
+                sx={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setActiveEdits((prev) => ({
+                    ...prev,
+                    username: !prev.username,
+                  }))
+                }}
+              />
+            ),
           }}
         />
+
+        <TextField
+          label='Address'
+          value={userDetails.address}
+          disabled={!activeEdits.address}
+          fullWidth
+          multiline
+          onChange={(e) => {
+            setUserDetails((prev) => ({
+              ...prev,
+              address: e.target.value,
+            }))
+          }}
+          InputProps={{
+            endAdornment: EditOrSaveButton('address'),
+          }}
+        />
+
+        <TextField
+          label='Description'
+          value={userDetails.description}
+          disabled={!activeEdits.description}
+          fullWidth
+          multiline
+          onChange={(e) => {
+            setUserDetails((prev) => ({
+              ...prev,
+              description: e.target.value,
+            }))
+          }}
+          InputProps={{
+            endAdornment: EditOrSaveButton('description'),
+          }}
+        />
+
         <TextField
           label='Email'
           value={userDetails.email}
@@ -218,6 +279,23 @@ function CustomerProfile() {
             endAdornment: EditOrSaveButton('phoneNumber'),
           }}
         />
+
+        <TextField
+          label='Website'
+          value={userDetails.website}
+          disabled={!activeEdits.website}
+          fullWidth
+          onChange={(e) => {
+            setUserDetails((prev) => ({
+              ...prev,
+              website: e.target.value,
+            }))
+          }}
+          InputProps={{
+            endAdornment: EditOrSaveButton('website'),
+          }}
+        />
+
         <Box display='flex' alignItems='center'>
           <FormControlLabel
             label='Use Multi-Factor Authentication'
@@ -239,7 +317,6 @@ function CustomerProfile() {
 
           {EditOrSaveButton('useMultiFactorAuthentication')}
         </Box>
-
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
@@ -257,7 +334,7 @@ function CustomerProfile() {
           <Button
             variant='text'
             color='error'
-            onClick={() => handleCancelUpdate()}
+            onClick={() => handleCancleUpdate()}
             fullWidth
           >
             Cancel
@@ -274,14 +351,16 @@ function CustomerProfile() {
             </Alert>
           </Snackbar>
         </Stack>
-        {errors.map((error, index) => (
-          <Alert severity='error' key={index}>
-            {error}
-          </Alert>
-        ))}
+        <List>
+          {errors.map((error, index) => (
+            <ListItem key={index}>
+              <Typography color='error'>{error}</Typography>
+            </ListItem>
+          ))}
+        </List>
       </Stack>
     </Fragment>
   )
 }
 
-export default CustomerProfile
+export default StoreProfile

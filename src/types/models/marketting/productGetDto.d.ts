@@ -3,6 +3,6 @@ declare type ProductGetDto = {
   name: string
   description: string
   photo: string
-  expirationDate?: string | null // Assuming DateTime? is serialized as string or null
+  expirationDate?: Date | null
   categories: CategoryGetDto[]
 }

@@ -3,7 +3,7 @@ declare type UserGetDto = {
   username: string
   email: string
   phoneNumber: string
-  useMultiFactorAuthentication: string
+  useMultiFactorAuthentication: boolean
   role: UserRole
   emailVerified: boolean
   phoneNumberVerified: boolean

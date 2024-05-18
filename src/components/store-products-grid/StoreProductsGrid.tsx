@@ -1,13 +1,14 @@
-import { Box, Grid, Pagination, styled } from '@mui/material'
+import { Box, Grid, Pagination, Stack, styled } from '@mui/material'
 import { useGetShoppingListQuery } from '../../store/apis/customerApi'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
-import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import DefaultErrorMessage from '../default-error-message/DefaultErrorMessage'
-import FilterProductsDrawerContainer from '../filter-products-drawer-container/FilterProductsDrawerContainer'
+import FilterProductsDrawerContainer from '../right-drawer-container/RightDrawerContainer'
 import StoreProductCard from '../store-product-card/StoreProductCard'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
+import { selectNavMenuDrawerWidth } from '../../store/features/nav-menu-drawer/navMenuDrawerSelectors'
+import { selectRightDrawerWidth } from '../../store/features/right-drawer/rightDrawerSelectors'
 
 type PropsType = {
   data: ServiceCollectionResponse<StoreProductGetDto> | undefined
@@ -26,9 +27,11 @@ function StoreProductsGrid({
   totalPages,
   setCurrentPage,
 }: PropsType) {
+  const fullUrl = window.location.href
   const loggedInUserId = useAppSelector(selectAuthUserId)
-  const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
-  const navMenuDrawerWidth = useAppSelector(selectFilterProductsDrawerWidth)
+  const rightDrawerLength = useAppSelector(selectRightDrawerWidth)
+  const navMenuDrawerWidth = useAppSelector(selectNavMenuDrawerWidth)
+  const isMyStore = fullUrl.includes('my-products')
 
   let shoppingList = [] as StoreProductGetDto[] | null
 
@@ -45,14 +48,15 @@ function StoreProductsGrid({
   }
 
   return (
-    <Box>
+    <Stack spacing={2}>
       <ProductsGrid
         navmenudrawerwidth={navMenuDrawerWidth}
-        filterdrawerlength={filterDrawerLength}
+        filterdrawerlength={rightDrawerLength}
       >
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
             <StoreProductCard
+              isMyStore={isMyStore}
               storeProduct={storeProduct}
               inTheShoppingList={shoppingList?.some(
                 (p) => p.id === storeProduct.id
@@ -60,6 +64,7 @@ function StoreProductsGrid({
             />
           </Grid>
         ))}
+
         <PaginationContainer>
           <Pagination
             count={totalPages}
@@ -71,8 +76,8 @@ function StoreProductsGrid({
         </PaginationContainer>
       </ProductsGrid>
 
-      <FilterProductsDrawerContainer />
-    </Box>
+      {!isMyStore && <FilterProductsDrawerContainer />}
+    </Stack>
   )
 }
 
@@ -91,11 +96,15 @@ const ProductsGrid = (props: {
 }) => {
   const StyledGrid = styled(Grid)(({ theme }) => ({
     flexGrow: 1,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    padding: theme.spacing(2),
+
     [theme.breakpoints.up('xs')]: {
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: `calc(130% - ${props.navmenudrawerwidth}px)`,
+      width: `calc(100vw   - ${props.filterdrawerlength}px)`,
     },
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${props.filterdrawerlength}px)`,

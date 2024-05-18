@@ -15,6 +15,8 @@ import { useAppSelector } from './utils/hooks/reduxHooks'
 import ShoppingList from './pages/shopping-list/ShoppingList'
 import { IsAuthorized } from './utils/helpers/authHelper'
 import UserProfile from './pages/user-profile/UserProfile'
+import EditProduct from './pages/edit-product/EditProduct'
+import Register from './pages/register/Register'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -34,7 +36,7 @@ function App() {
           width={{ sm: `calc(100% - ${drawerWidth}px)` }}
         >
           <Toolbar />
-          <Box p={3}>
+          <Box>
             <Routes>
               <Route path='/' element={<MainPage />} />
               <Route path='/login' element={<Login />} />
@@ -49,6 +51,11 @@ function App() {
                 }
               />
               <Route path='/store/:storeId' element={<Store />} />
+              <Route path='/my-products' element={<Store />} />
+              <Route
+                path='/edit-product/:productId'
+                element={<EditProduct />}
+              />
               <Route
                 path='/shopping-list'
                 element={

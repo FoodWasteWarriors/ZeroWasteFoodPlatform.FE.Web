@@ -32,17 +32,9 @@ const storeProductsApi = createApi({
     }),
     getStoreProductById: builder.query<
       ServiceObjectResponse<StoreProductGetDto>,
-      {
-        id: string
-        page?: number
-        pageSize?: number
-        nameQuery?: string
-      }
+      string
     >({
-      query: ({ id, page = 1, pageSize = 10, nameQuery }) => ({
-        url: `/${id}`,
-        params: { page, pageSize, nameQuery },
-      }),
+      query: (id) => `/${id}`,
     }),
     getStoreProductsByUserId: builder.query<
       ServiceCollectionResponse<StoreProductGetDto>,
@@ -81,8 +73,8 @@ const storeProductsApi = createApi({
       ServiceObjectResponse<StoreProductGetDto>,
       StoreProductUpdateDto
     >({
-      query: ({ id, ...storeProduct }) => ({
-        url: `/${id}`,
+      query: (storeProduct) => ({
+        url: '/',
         method: 'PUT',
         body: storeProduct,
       }),

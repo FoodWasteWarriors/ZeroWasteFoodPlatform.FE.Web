@@ -45,7 +45,7 @@ function ChangeUserPassword() {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {
           errorMessages = error.data.messages.map(
-            (message: any) => message.description
+            (message: ResponseMessage) => message.description
           )
         }
 
@@ -107,13 +107,11 @@ function ChangeUserPassword() {
         Change Password
       </Button>
 
-      <List>
-        {errors.map((error, index) => (
-          <ListItem key={index}>
-            <Typography color='error'>{error}</Typography>
-          </ListItem>
-        ))}
-      </List>
+      {errors.map((error, index) => (
+        <Alert severity='error' key={index}>
+          {error}
+        </Alert>
+      ))}
 
       <Snackbar open={success} autoHideDuration={6000}>
         <Alert

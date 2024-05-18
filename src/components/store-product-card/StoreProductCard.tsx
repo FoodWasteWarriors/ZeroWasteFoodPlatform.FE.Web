@@ -1,36 +1,39 @@
+import { Edit, Favorite } from '@mui/icons-material'
+import SellIcon from '@mui/icons-material/Sell'
 import {
+  Box,
   Card,
   CardContent,
   CardMedia,
-  Typography,
   IconButton,
-  Box,
   styled,
+  Typography,
 } from '@mui/material'
-import { getFinalPrice } from '../../utils/helpers/priceHelpers'
-import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
-import { Favorite } from '@mui/icons-material'
-import SellIcon from '@mui/icons-material/Sell'
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { selectAuthIsAuthenticated } from '../../store/features/auth/authSelectors'
-import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
-import { useAppSelector } from '../../utils/hooks/reduxHooks'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import UserRoles from '../../constants/userRoles'
 import {
   useAddToShoppingListMutation,
   useRemoveFromShoppingListMutation,
 } from '../../store/apis/storeProducsApi'
+import { selectAuthUserType } from '../../store/features/auth/authSelectors'
+import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
+import { getFinalPrice } from '../../utils/helpers/priceHelpers'
+import { useAppSelector } from '../../utils/hooks/reduxHooks'
+import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
 
 type PropType = {
   storeProduct: StoreProductGetDto
   inTheShoppingList: boolean | undefined
+  isMyStore?: boolean
 }
 
 function StoreProductCard(props: PropType) {
-  const { storeProduct, inTheShoppingList } = props
+  const { storeProduct, inTheShoppingList, isMyStore } = props
   const [isFavorite, setIsFavorite] = useState(inTheShoppingList)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const isAuthenticated = useAppSelector(selectAuthIsAuthenticated)
+  const role = useAppSelector(selectAuthUserType)
+  const navigate = useNavigate()
 
   const finalPrice = getFinalPrice(
     storeProduct.originalPrice,
@@ -45,7 +48,7 @@ function StoreProductCard(props: PropType) {
   }, [inTheShoppingList])
 
   const handleFavoriteClick = () => {
-    if (!isAuthenticated) {
+    if (!role) {
       setIsDialogOpen(true)
       return
     }
@@ -57,6 +60,10 @@ function StoreProductCard(props: PropType) {
       addToShoppingList({ productId: storeProduct.id })
       setIsFavorite(true)
     }
+  }
+
+  const handleEditClick = () => {
+    navigate(`/edit-product/${storeProduct.id}`)
   }
 
   const discountRate = storeProduct.percentDiscount
@@ -119,9 +126,21 @@ function StoreProductCard(props: PropType) {
           </Typography>
         </LowerCardBody>
       </CardContent>
-      <FavIconButton isFavorite={isFavorite} onClick={handleFavoriteClick}>
-        <Favorite />
-      </FavIconButton>
+      
+      {role === UserRoles.Customer && (
+        <IconButtonContainer
+          isFavorite={isFavorite}
+          onClick={handleFavoriteClick}
+        >
+          <Favorite />
+        </IconButtonContainer>
+      )}
+
+      {isMyStore && (
+        <IconButtonContainer onClick={handleEditClick}>
+          <Edit />
+        </IconButtonContainer>
+      )}
 
       <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </ProductCard>
@@ -136,8 +155,8 @@ const ProductCard = styled(Card)(() => ({
   },
 }))
 
-const FavIconButton = (props: {
-  isFavorite: boolean | undefined
+const IconButtonContainer = (props: {
+  isFavorite?: boolean | undefined
   children: React.ReactNode
   onClick: () => void
 }) => {

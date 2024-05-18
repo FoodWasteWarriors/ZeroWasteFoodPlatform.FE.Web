@@ -34,14 +34,6 @@ const mainTheme = (mode: ThemeMode) =>
     },
 
     components: {
-      MuiMenuItem: {
-        styleOverrides: {
-          root: {
-            whiteSpace: 'unset',
-            wordBreak: 'break-all',
-          },
-        },
-      },
       MuiTypography: {
         styleOverrides: {
           h1: {
@@ -67,6 +59,20 @@ const mainTheme = (mode: ThemeMode) =>
           },
           body2: {
             fontSize: '0.8rem',
+          },
+        },
+      },
+      MuiAlert: {
+        styleOverrides: {
+          root: {
+            width: '100%',
+          },
+        },
+      },
+      MuiGrid: {
+        styleOverrides: {
+          item: {
+            padding: '8px',
           },
         },
       },

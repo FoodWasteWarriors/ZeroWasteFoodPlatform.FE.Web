@@ -1,14 +1,14 @@
 import { Box, Drawer, Toolbar } from '@mui/material'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import {
-  selectFilterProductsDrawerIsOpen,
-  selectFilterProductsDrawerWidth,
-} from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
+  selectRightDrawerIsOpen,
+  selectRightDrawerWidth,
+} from '../../store/features/right-drawer/rightDrawerSelectors'
 import FilterProductsDrawerContent from '../filter-products-drawer-content/FilterProductsDrawerContent'
 
-function FilterProductsDrawerContainer() {
-  const width = useAppSelector(selectFilterProductsDrawerWidth)
-  const isOpen = useAppSelector(selectFilterProductsDrawerIsOpen)
+function RightDrawerContainer() {
+  const width = useAppSelector(selectRightDrawerWidth)
+  const isOpen = useAppSelector(selectRightDrawerIsOpen)
 
   return (
     <Box
@@ -53,4 +53,4 @@ function FilterProductsDrawerContainer() {
   )
 }
 
-export default FilterProductsDrawerContainer
+export default RightDrawerContainer
