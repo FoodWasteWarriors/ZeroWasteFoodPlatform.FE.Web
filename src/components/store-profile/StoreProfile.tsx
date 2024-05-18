@@ -119,6 +119,7 @@ function StoreProfile() {
   }
 
   const handleCancleUpdate = () => {
+    setErrors([])
     SetDefaluts()
     setActiveEdits(defaultActiveEdits)
   }

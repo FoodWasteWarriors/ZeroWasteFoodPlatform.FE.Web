@@ -112,6 +112,7 @@ function EditProduct() {
   }
 
   const handleCancelUpdate = () => {
+    setErrors([])
     SetDefaluts()
     setActiveEdits(defaultActiveEdits)
   }

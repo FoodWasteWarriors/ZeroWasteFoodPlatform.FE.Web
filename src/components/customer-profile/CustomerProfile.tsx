@@ -106,6 +106,7 @@ function CustomerProfile() {
   }
 
   const handleCancelUpdate = () => {
+    setErrors([])
     SetDefaluts()
     setActiveEdits(defaultActiveEdits)
   }
