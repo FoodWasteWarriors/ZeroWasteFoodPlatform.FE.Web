@@ -3,5 +3,5 @@ declare type UserUpdateDto = {
   username?: string | null
   email?: string | null
   phoneNumber?: string | null
-  useMultiFactorAuthentication?: string | null
+  useMultiFactorAuthentication?: boolean | null
 }

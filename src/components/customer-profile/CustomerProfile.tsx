@@ -2,10 +2,12 @@ import { Edit } from '@mui/icons-material'
 import {
   Alert,
   Avatar,
+  Box,
   Button,
+  Checkbox,
+  FormControlLabel,
   List,
   ListItem,
-  MenuItem,
   Snackbar,
   Stack,
   TextField,
@@ -44,7 +46,7 @@ function CustomerProfile() {
     username: '',
     email: '',
     phoneNumber: '',
-    useMultiFactorAuthentication: '',
+    useMultiFactorAuthentication: false,
     emailVerified: false,
     phoneNumberVerified: false,
     lastLoginTime: '',
@@ -83,6 +85,7 @@ function CustomerProfile() {
       .then(() => {
         setSuccess(true)
         setErrors([])
+        SetDefaluts()
       })
       .catch((error) => {
         let errorMessages
@@ -98,8 +101,6 @@ function CustomerProfile() {
         setErrors(errorMessages)
         setSuccess(false)
       })
-
-    SetDefaluts()
 
     setActiveEdits(defaultActiveEdits)
   }
@@ -223,36 +224,37 @@ function CustomerProfile() {
             ),
           }}
         />
-        <TextField
-          select
-          label='Use Multi Factor Authentication'
-          value={userDetails.useMultiFactorAuthentication}
-          disabled={!activeEdits.useMultiFactorAuthentication}
-          fullWidth
-          onChange={(e) => {
-            setUserDetails((prev) => ({
-              ...prev,
-              useMultiFactorAuthentication: e.target.value,
-            }))
-          }}
-          InputProps={{
-            endAdornment: (
-              <Edit
-                sx={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setActiveEdits((prev) => ({
+        <Box display='flex' alignItems='center'>
+          <FormControlLabel
+            label='Use Multi-Factor Authentication'
+            checked={userDetails.useMultiFactorAuthentication}
+            control={
+              <Checkbox
+                checked={userDetails.useMultiFactorAuthentication}
+                inputProps={{ 'aria-label': 'controlled' }}
+                onChange={(e) => {
+                  setUserDetails((prev) => ({
                     ...prev,
-                    useMultiFactorAuthentication:
-                      !prev.useMultiFactorAuthentication,
+                    useMultiFactorAuthentication: e.target.checked,
                   }))
                 }}
+                disabled={!activeEdits.useMultiFactorAuthentication}
               />
-            ),
-          }}
-        >
-          <MenuItem value='True'>Yes</MenuItem>
-          <MenuItem value='False'>No</MenuItem>
-        </TextField>
+            }
+          />
+
+          <Edit
+            sx={{ cursor: 'pointer' }}
+            onClick={() => {
+              setActiveEdits((prev) => ({
+                ...prev,
+                useMultiFactorAuthentication:
+                  !prev.useMultiFactorAuthentication,
+              }))
+            }}
+          />
+        </Box>
+
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
