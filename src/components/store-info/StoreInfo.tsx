@@ -16,16 +16,16 @@ import {
 } from '@mui/material'
 import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
 import { useGetBusinessByIdQuery } from '../../store/apis/businessApi'
-import { selectFilterProductsDrawerWidth } from '../../store/features/filter-products-drawer/filterProductsDrawerSelectors'
 import { selectThemeMode } from '../../store/features/theme/themeSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
+import { selectRightDrawerWidth } from '../../store/features/right-drawer/rightDrawerSelectors'
 
 type PropsType = {
   storeId: string
 }
 
 function StoreInfo({ storeId }: PropsType) {
-  const filterDrawerLength = useAppSelector(selectFilterProductsDrawerWidth)
+  const rightDrawerLength = useAppSelector(selectRightDrawerWidth)
   const { data, error, isLoading } = useGetBusinessByIdQuery(storeId!)
   const themeMode = useAppSelector(selectThemeMode)
 
@@ -49,7 +49,7 @@ function StoreInfo({ storeId }: PropsType) {
   const isProfileVerified = emailVerified && phoneNumberVerified
 
   return (
-    <StoreInfoGrid filterDrawerLength={filterDrawerLength}>
+    <StoreInfoGrid filterDrawerLength={rightDrawerLength}>
       <StoreAvatarContainer item xs={12} xl={3}>
         <StoreAvatar src={logo} />
 

@@ -5,12 +5,9 @@ import {
   Avatar,
   Button,
   Container,
-  List,
-  ListItem,
   Snackbar,
   Stack,
   TextField,
-  Typography,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useCallback, useEffect, useState } from 'react'
@@ -326,13 +323,11 @@ function EditProduct() {
             </Alert>
           </Snackbar>
         </Stack>
-        <List>
-          {errors.map((error, index) => (
-            <ListItem key={index}>
-              <Typography color='error'>{error}</Typography>
-            </ListItem>
-          ))}
-        </List>
+        {errors.map((error, index) => (
+          <Alert severity='error' key={index}>
+            {error}
+          </Alert>
+        ))}
       </Stack>
     </Container>
   )

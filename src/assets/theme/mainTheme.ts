@@ -62,6 +62,20 @@ const mainTheme = (mode: ThemeMode) =>
           },
         },
       },
+      MuiAlert: {
+        styleOverrides: {
+          root: {
+            width: '100%',
+          },
+        },
+      },
+      MuiGrid: {
+        styleOverrides: {
+          item: {
+            padding: '8px',
+          },
+        },
+      },
     },
   })
 

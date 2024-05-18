@@ -1,8 +1,6 @@
 import {
   Alert,
   Button,
-  List,
-  ListItem,
   Snackbar,
   Stack,
   TextField,
@@ -107,13 +105,11 @@ function ChangeUserPassword() {
         Change Password
       </Button>
 
-      <List>
-        {errors.map((error, index) => (
-          <ListItem key={index}>
-            <Typography color='error'>{error}</Typography>
-          </ListItem>
-        ))}
-      </List>
+      {errors.map((error, index) => (
+        <Alert severity='error' key={index}>
+          {error}
+        </Alert>
+      ))}
 
       <Snackbar open={success} autoHideDuration={6000}>
         <Alert

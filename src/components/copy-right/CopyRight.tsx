@@ -1,15 +1,15 @@
-import { Link, Typography } from '@mui/material'
+import { Link } from '@mui/material'
 import { Box, styled } from '@mui/material'
 
 function CopyRight() {
   return (
     <CopyrightContainer>
-      <Typography variant='body2' align='center'>
-        {`Copyright © ${new Date().getFullYear()} `}
+      <Box component='span'>{`Copyright © ${new Date().getFullYear()} `}</Box>
+      <Box component='span' fontWeight='bold'>
         <Link href='https://github.com/FoodWasteWarriors'>
           Food Waste Warriors
         </Link>{' '}
-      </Typography>
+      </Box>
     </CopyrightContainer>
   )
 }
@@ -21,6 +21,7 @@ const CopyrightContainer = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   color: theme.palette.text.secondary,
+  fontSize: '0.8rem',
 }))
 
 export default CopyRight

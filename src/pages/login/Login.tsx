@@ -4,13 +4,9 @@ import {
   Grid,
   Typography,
   Container,
-  Switch,
-  FormControlLabel,
   Stack,
   Alert,
   Snackbar,
-  List,
-  ListItem,
 } from '@mui/material'
 import { useLoginUserMutation } from '../../store/apis/authApi'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
@@ -25,21 +21,23 @@ function Login() {
   const [loginUserMutation] = useLoginUserMutation()
   const [success, setSuccess] = useState(false)
   const [errors, setErrors] = useState([] as string[])
-  const [useEmail, setUseEmail] = useState(false) // Add this line
-  const [loginData, setLoginData] = useState<UserLoginDto>({
-    username: null,
-    email: null,
+  const [loginData, setLoginData] = useState({
+    usernameOrEmail: '',
     password: '',
   })
 
-  const onSubmit = (values: UserLoginDto) => {
+  const onSubmit = (values: { usernameOrEmail: string; password: string }) => {
     // Modify this line to use either username or email based on the switch
-    const loginValues = useEmail
-      ? ({ email: values.email, password: values.password } as UserLoginDto)
-      : ({
-          username: values.username,
-          password: values.password,
-        } as UserLoginDto)
+    let loginValues
+
+    if (values.usernameOrEmail.includes('@')) {
+      loginValues = { email: values.usernameOrEmail, password: values.password }
+    } else {
+      loginValues = {
+        username: values.usernameOrEmail,
+        password: values.password,
+      }
+    }
 
     loginUserMutation(loginValues)
       .unwrap()
@@ -87,42 +85,19 @@ function Login() {
         Login
       </Typography>
 
-      <Stack spacing={2} direction={'column'} component='form'>
-        <Stack spacing={2} direction={'row'}>
-          {useEmail ? (
-            <TextField
-              required
-              variant='filled'
-              fullWidth
-              label='Email'
-              name='email'
-              onChange={(e) =>
-                setLoginData({ ...loginData, email: e.target.value })
-              }
-            />
-          ) : (
-            <TextField
-              variant='filled'
-              required
-              fullWidth
-              label='Username'
-              name='username'
-              onChange={(e) =>
-                setLoginData({ ...loginData, username: e.target.value })
-              }
-            />
-          )}
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={useEmail}
-                onChange={() => setUseEmail(!useEmail)}
-              />
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: '400px' }}>
+        <Grid item xs={12}>
+          <TextField
+            variant='filled'
+            required
+            fullWidth
+            label='Email or Username'
+            name='usernameOrEmail'
+            onChange={(e) =>
+              setLoginData({ ...loginData, usernameOrEmail: e.target.value })
             }
-            label='Use Email'
           />
-        </Stack>
+        </Grid>
 
         <Grid item xs={12}>
           <TextField
@@ -162,13 +137,11 @@ function Login() {
             User details updated successfully!
           </Alert>
         </Snackbar>
-        <List>
-          {errors.map((error, index) => (
-            <ListItem key={index}>
-              <Typography color='error'>{error}</Typography>
-            </ListItem>
-          ))}
-        </List>
+        {errors.map((error, index) => (
+          <Alert severity='error' key={index}>
+            {error}
+          </Alert>
+        ))}
       </Stack>
     </Container>
   )

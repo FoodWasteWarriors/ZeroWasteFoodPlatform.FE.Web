@@ -23,14 +23,14 @@ import storeProductsApi from './apis/storeProducsApi'
 import userApi from './apis/userApi'
 
 import authReducer from './features/auth/authSlice'
-import filterProductsDrawerSlice from './features/filter-products-drawer/filterProductsDrawerSlice'
+import rightDrawerReducer from './features/right-drawer/rightDrawerSlice'
 import navMenuDrawerReducer from './features/nav-menu-drawer/navMenuDrawerSlice'
 import themeReducer from './features/theme/themeSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
   navMenuDrawer: navMenuDrawerReducer,
-  filterProductsDrawer: filterProductsDrawerSlice,
+  rightDrawer: rightDrawerReducer,
   auth: authReducer,
 
   // Api reducers

@@ -6,8 +6,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  List,
-  ListItem,
   Snackbar,
   Stack,
   TextField,
@@ -277,13 +275,11 @@ function CustomerProfile() {
             </Alert>
           </Snackbar>
         </Stack>
-        <List>
-          {errors.map((error, index) => (
-            <ListItem key={index}>
-              <Typography color='error'>{error}</Typography>
-            </ListItem>
-          ))}
-        </List>
+        {errors.map((error, index) => (
+          <Alert severity='error' key={index}>
+            {error}
+          </Alert>
+        ))}
       </Stack>
     </Fragment>
   )

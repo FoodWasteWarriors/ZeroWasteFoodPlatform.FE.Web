@@ -1,4 +1,4 @@
-import { Favorite, Store } from '@mui/icons-material'
+import { Favorite, ProductionQuantityLimits, Store } from '@mui/icons-material'
 
 const loggedInUserMenus = {
   // Menu items that do not require authentication
@@ -14,7 +14,7 @@ const loggedInUserMenus = {
     {
       link: 'My Products',
       to: '/my-products',
-      icon: <Store />,
+      icon: <ProductionQuantityLimits />,
     },
   ] as SideMenuItem[],
   Customer: [

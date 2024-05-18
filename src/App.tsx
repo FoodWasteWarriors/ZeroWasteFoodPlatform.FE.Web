@@ -36,7 +36,7 @@ function App() {
           width={{ sm: `calc(100% - ${drawerWidth}px)` }}
         >
           <Toolbar />
-          <Box p={3}>
+          <Box>
             <Routes>
               <Route path='/' element={<MainPage />} />
               <Route path='/login' element={<Login />} />
