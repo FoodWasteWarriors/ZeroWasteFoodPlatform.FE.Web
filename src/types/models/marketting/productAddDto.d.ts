@@ -4,4 +4,5 @@ declare type ProductAddDto = {
   photo?: string | null
   expirationDate: Date
   categoriesIds: string[]
+  barcode: string
 }

@@ -5,4 +5,5 @@ declare type ProductGetDto = {
   photo: string
   expirationDate?: Date | null
   categories: CategoryGetDto[]
+  barcode: string
 }
