@@ -17,6 +17,8 @@ import { IsAuthorized } from './utils/helpers/authHelper'
 import UserProfile from './pages/user-profile/UserProfile'
 import EditProduct from './pages/edit-product/EditProduct'
 import Register from './pages/register/Register'
+import MonitoredProducts from './pages/monitored-products/MonitoredProducts'
+import Reports from './pages/reports/Reports'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -25,49 +27,32 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box display='flex'>
+      <Box display="flex">
         <CssBaseline />
         <Header />
         <DrawerContainer />
 
-        <Box
-          component='main'
-          flexGrow={1}
-          width={{ sm: `calc(100% - ${drawerWidth}px)` }}
-        >
+        <Box component="main" flexGrow={1} width={{ sm: `calc(100% - ${drawerWidth}px)` }}>
           <Toolbar />
           <Box>
             <Routes>
-              <Route path='/' element={<MainPage />} />
-              <Route path='/login' element={<Login />} />
+              <Route path="/" element={<MainPage />} />
+              <Route path="/login" element={<Login />} />
               <Route
-                path='/profile/:userId'
-                element={
-                  IsAuthorized('/profile/:userId') ? (
-                    <UserProfile />
-                  ) : (
-                    <Navigate to='/login' />
-                  )
-                }
+                path="/profile/:userId"
+                element={IsAuthorized('/profile/:userId') ? <UserProfile /> : <Navigate to="/login" />}
               />
-              <Route path='/register' element={<Register />} />
-              <Route path='/store/:storeId' element={<Store />} />
-              <Route path='/my-products' element={<Store />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/store/:storeId" element={<Store />} />
+              <Route path="/my-products" element={<Store />} />
+              <Route path="/monitored-products" element={<MonitoredProducts />} />
+              <Route path="/edit-product/:productId" element={<EditProduct />} />
+              <Route path="/reports" element={<Reports />} />
               <Route
-                path='/edit-product/:productId'
-                element={<EditProduct />}
+                path="/shopping-list"
+                element={IsAuthorized('/shopping-list') ? <ShoppingList /> : <Navigate to="/login" />}
               />
-              <Route
-                path='/shopping-list'
-                element={
-                  IsAuthorized('/shopping-list') ? (
-                    <ShoppingList />
-                  ) : (
-                    <Navigate to='/login' />
-                  )
-                }
-              />
-              <Route path='*' element={<NotFound />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Box>
         </Box>

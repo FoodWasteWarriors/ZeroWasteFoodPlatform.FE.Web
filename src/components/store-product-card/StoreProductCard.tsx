@@ -147,7 +147,7 @@ function StoreProductCard(props: PropType) {
   )
 }
 
-const ProductCard = styled(Card)(() => ({
+export const ProductCard = styled(Card)(() => ({
   paddingBottom: '24px',
   position: 'relative',
   '&:hover': {
