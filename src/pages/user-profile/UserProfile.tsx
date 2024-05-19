@@ -18,7 +18,7 @@ function UserProfile() {
   }
 
   return (
-    <Container>
+    <Container sx={{ padding: 4 }}>
       {profile}
 
       <ChangeUserPassword />
