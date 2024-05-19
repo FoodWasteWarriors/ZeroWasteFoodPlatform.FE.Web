@@ -80,49 +80,55 @@ function StoreProductCard(props: PropType) {
           {storeProduct.business.name}
         </Typography>
       </Link>
-      <CardMedia
-        component='img'
-        alt={storeProduct.name}
-        height='140'
-        image={storeProduct.photo}
-        title={storeProduct.name}
-      />
-      {discountRate && (
-        <DiscountRateContainer>
-          <SellIcon fontSize='inherit' />
-          {discountRate}
-        </DiscountRateContainer>
-      )}
-      <CardContent>
-        <Typography variant='h5' component='h2' fontSize={20}>
-          {storeProduct.name}
-        </Typography>
-        {storeProduct.expirationDate && (
-          <Typography variant='body2' color='textSecondary' marginBottom={1}>
-            Expires In: {getFormattedDate(storeProduct.expirationDate)}
-          </Typography>
+      <Link
+        to={`/product/${storeProduct.id}`}
+        style={{ textDecoration: 'none' }}
+      >
+        <CardMedia
+          component='img'
+          alt={storeProduct.name}
+          height='140'
+          image={storeProduct.photo}
+          title={storeProduct.name}
+        />
+        {discountRate && (
+          <DiscountRateContainer>
+            <SellIcon fontSize='inherit' />
+            {discountRate}
+          </DiscountRateContainer>
         )}
-        <LowerCardBody>
-          <Typography
-            variant='h6'
-            color='textSecondary'
-            sx={{
-              textDecoration: 'line-through',
-              fontSize: '14px',
-            }}
-          >
-            ${storeProduct.originalPrice.toFixed(2)}
+
+        <CardContent>
+          <Typography variant='h5' component='h2' fontSize={20}>
+            {storeProduct.name}
           </Typography>
-          <Typography
-            variant='h6'
-            component='h3'
-            color={'primary'}
-            sx={{ marginLeft: '4px', fontSize: '22px' }}
-          >
-            ${finalPrice.toFixed(2)}
-          </Typography>
-        </LowerCardBody>
-      </CardContent>
+          {storeProduct.expirationDate && (
+            <Typography variant='body2' color='textSecondary' marginBottom={1}>
+              Expires In: {getFormattedDate(storeProduct.expirationDate)}
+            </Typography>
+          )}
+          <LowerCardBody>
+            <Typography
+              variant='h6'
+              color='textSecondary'
+              sx={{
+                textDecoration: 'line-through',
+                fontSize: '14px',
+              }}
+            >
+              ${storeProduct.originalPrice.toFixed(2)}
+            </Typography>
+            <Typography
+              variant='h6'
+              component='h3'
+              color={'primary'}
+              sx={{ marginLeft: '4px', fontSize: '22px' }}
+            >
+              ${finalPrice.toFixed(2)}
+            </Typography>
+          </LowerCardBody>
+        </CardContent>
+      </Link>
 
       {role === UserRoles.Customer && (
         <IconButtonContainer

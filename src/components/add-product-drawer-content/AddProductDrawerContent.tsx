@@ -84,7 +84,7 @@ function AddProductDrawerContent() {
 
   return (
     <Container sx={{ padding: 4 }}>
-      <Typography variant='h4' gutterBottom align='center'>
+      <Typography variant='h4' gutterBottom align='center' marginBottom={3}>
         Add Product
       </Typography>
       <Stack spacing={2}>
@@ -165,9 +165,7 @@ function AddProductDrawerContent() {
             onChange={(_, value) => {
               setProductDetails((prev) => ({
                 ...prev,
-                categoryIds: value.map
-                  ? value.map((category) => category.id)
-                  : [],
+                categoriesIds: value.map((category) => category.id),
               }))
             }}
             renderInput={(params) => (
