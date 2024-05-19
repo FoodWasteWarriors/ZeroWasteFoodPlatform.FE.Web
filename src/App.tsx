@@ -37,8 +37,11 @@ function App() {
           <Toolbar />
           <Box>
             <Routes>
-              <Route path="/" element={<MainPage />} />
-              <Route path="/login" element={<Login />} />
+
+              <Route path='/' element={<MainPage />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+
               <Route
                 path="/profile/:userId"
                 element={IsAuthorized('/profile/:userId') ? <UserProfile /> : <Navigate to="/login" />}
