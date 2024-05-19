@@ -5,8 +5,14 @@ import {
   selectRightDrawerWidth,
 } from '../../store/features/right-drawer/rightDrawerSelectors'
 import FilterProductsDrawerContent from '../filter-products-drawer-content/FilterProductsDrawerContent'
+import AddProductDrawerContent from '../add-product-drawer-content/AddProductDrawerContent'
 
-function RightDrawerContainer() {
+type PropType = {
+  isMyStore?: boolean | undefined
+}
+
+function RightDrawerContainer(props: PropType) {
+  const { isMyStore } = props
   const width = useAppSelector(selectRightDrawerWidth)
   const isOpen = useAppSelector(selectRightDrawerIsOpen)
 
@@ -32,7 +38,11 @@ function RightDrawerContainer() {
         }}
       >
         {<Toolbar />}
-        {<FilterProductsDrawerContent />}
+        {isMyStore ? (
+          <AddProductDrawerContent />
+        ) : (
+          <FilterProductsDrawerContent />
+        )}
       </Drawer>
       <Drawer
         variant='permanent'
@@ -47,7 +57,11 @@ function RightDrawerContainer() {
         open
       >
         {<Toolbar />}
-        {<FilterProductsDrawerContent />}
+        {isMyStore ? (
+          <AddProductDrawerContent />
+        ) : (
+          <FilterProductsDrawerContent />
+        )}
       </Drawer>
     </Box>
   )

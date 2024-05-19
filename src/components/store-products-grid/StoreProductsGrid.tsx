@@ -3,7 +3,7 @@ import { useGetShoppingListQuery } from '../../store/apis/customerApi'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import DefaultErrorMessage from '../default-error-message/DefaultErrorMessage'
-import FilterProductsDrawerContainer from '../right-drawer-container/RightDrawerContainer'
+import RightDrawerContainer from '../right-drawer-container/RightDrawerContainer'
 import StoreProductCard from '../store-product-card/StoreProductCard'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
@@ -76,7 +76,7 @@ function StoreProductsGrid({
         </PaginationContainer>
       </ProductsGrid>
 
-      {!isMyStore && <FilterProductsDrawerContainer />}
+      <RightDrawerContainer isMyStore={isMyStore} />
     </Stack>
   )
 }
