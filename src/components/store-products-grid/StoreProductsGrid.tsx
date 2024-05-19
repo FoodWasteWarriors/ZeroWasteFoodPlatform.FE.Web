@@ -1,6 +1,6 @@
 import { Box, Grid, Pagination, Stack, styled, Typography } from '@mui/material'
 import { useGetShoppingListQuery } from '../../store/apis/customerApi'
-import { selectAuthUserId } from '../../store/features/auth/authSelectors'
+import { selectAuthUserId, selectAuthUserType } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import DefaultErrorMessage from '../default-error-message/DefaultErrorMessage'
 import RightDrawerContainer from '../right-drawer-container/RightDrawerContainer'
@@ -9,10 +9,9 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import { selectNavMenuDrawerWidth } from '../../store/features/nav-menu-drawer/navMenuDrawerSelectors'
 import { selectRightDrawerWidth } from '../../store/features/right-drawer/rightDrawerSelectors'
-import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import { useGetRecommendedProductsQuery } from '../../store/apis/recommendationApi'
-import { Link } from 'react-router-dom'
+import UserRoles from '../../constants/userRoles'
+import RecommendedCarousel from '../recommended-carousel/RecommendedCarousel'
 
 type PropsType = {
   data: ServiceCollectionResponse<StoreProductGetDto> | undefined
@@ -29,11 +28,7 @@ function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, se
   const rightDrawerLength = useAppSelector(selectRightDrawerWidth)
   const navMenuDrawerWidth = useAppSelector(selectNavMenuDrawerWidth)
   const isMyStore = fullUrl.includes('my-products')
-  const {
-    data: recommendedProductsData,
-    error: recommendedProductsError,
-    isLoading: recommendedProductsIsLoading
-  } = useGetRecommendedProductsQuery()
+  const userType = useAppSelector(selectAuthUserType)
 
   let shoppingList = [] as StoreProductGetDto[] | null
 
@@ -43,48 +38,16 @@ function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, se
     shoppingList = shoppingListData.data.data
   }
 
-  if (isLoading || recommendedProductsIsLoading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>
 
-  if (error || recommendedProductsError) {
+  if (error) {
     return <DefaultErrorMessage message="Error loading store products" />
   }
 
   return (
     <Stack spacing={2}>
       <ProductsGrid navmenudrawerwidth={navMenuDrawerWidth} filterdrawerlength={rightDrawerLength}>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          lg={12}
-          xl={12}
-          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}
-        >
-          <Stack spacing={2}>
-            <Typography variant="h3" align="center" gutterBottom>
-              Recommended Products
-            </Typography>
-            <Carousel showThumbs={false} showArrows width={350} swipeable={true} infiniteLoop autoPlay>
-              {recommendedProductsData?.data?.map((storeProduct) => (
-                <Link to={`/product/${storeProduct.id}`} key={storeProduct.id}>
-                  <div key={storeProduct.id}>
-                    <img
-                      style={{
-                        aspectRatio: '1/1',
-                        maxWidth: '300px',
-                        maxHeight: '300px'
-                      }}
-                      src={storeProduct.photo}
-                      alt={storeProduct.name}
-                    />
-                    <p className="legend">{storeProduct.name}</p>
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
-          </Stack>
-        </Grid>
+        {userType === UserRoles.Customer && <RecommendedCarousel />}
 
         {data?.data?.map((storeProduct) => (
           <Grid item xs={12} md={6} lg={4} xl={2} key={storeProduct.id}>
