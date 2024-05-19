@@ -55,7 +55,7 @@ function StoreInfo({ storeId }: PropsType) {
 
         <Box display='flex' alignItems='center' my={4}>
           {isProfileVerified ? (
-            <Grid item>
+            <Box display='flex' alignItems='center' mt={1}>
               <Tooltip title='Profile Verified' arrow>
                 <CheckCircle
                   color='primary'
@@ -65,7 +65,7 @@ function StoreInfo({ storeId }: PropsType) {
               <Typography variant='body2' color='primary'>
                 Profile Verified
               </Typography>
-            </Grid>
+            </Box>
           ) : (
             <Box display='flex' alignItems='center' mt={1}>
               <Tooltip title='Profile Not Verified' arrow>
@@ -139,6 +139,7 @@ const StoreInfoGrid = (props: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: theme.spacing(2),
+    padding: theme.spacing(3),
     marginTop: '-2px',
     flexGrow: 1,
     [theme.breakpoints.up('sm')]: {

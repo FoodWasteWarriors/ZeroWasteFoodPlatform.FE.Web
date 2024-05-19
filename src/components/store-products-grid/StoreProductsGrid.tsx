@@ -3,7 +3,7 @@ import { useGetShoppingListQuery } from '../../store/apis/customerApi'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
 import DefaultErrorMessage from '../default-error-message/DefaultErrorMessage'
-import FilterProductsDrawerContainer from '../right-drawer-container/RightDrawerContainer'
+import RightDrawerContainer from '../right-drawer-container/RightDrawerContainer'
 import StoreProductCard from '../store-product-card/StoreProductCard'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
@@ -71,7 +71,7 @@ function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, se
         </Grid>
 
         {data?.data?.map((storeProduct) => (
-          <Grid item xs={12} sm={8} md={6} lg={4} xl={2} key={storeProduct.id}>
+          <Grid item xs={12} md={6} lg={4} xl={2} key={storeProduct.id}>
             <StoreProductCard
               isMyStore={isMyStore}
               storeProduct={storeProduct}
@@ -91,7 +91,7 @@ function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, se
         </PaginationContainer>
       </ProductsGrid>
 
-      {!isMyStore && <FilterProductsDrawerContainer />}
+      <RightDrawerContainer isMyStore={isMyStore} />
     </Stack>
   )
 }
@@ -119,14 +119,14 @@ export const ProductsGrid = (props: {
       width: '100%'
     },
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100vw   - ${props.filterdrawerlength}px)`
+      width: `calc(100%  - ${props.filterdrawerlength}px)`
     },
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${props.filterdrawerlength}px)`
     }
   }))
 
-  return <StyledGrid spacing={2} container {...props} />
+  return <StyledGrid container {...props} />
 }
 
 export default StoreProductsGrid

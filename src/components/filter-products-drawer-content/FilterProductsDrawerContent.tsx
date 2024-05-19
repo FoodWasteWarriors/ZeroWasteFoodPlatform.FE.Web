@@ -41,6 +41,9 @@ function FilterProductsDrawerContent() {
 
   return (
     <Box sx={{ overflow: 'auto', marginTop: 4 }}>
+      <Typography variant='h4' gutterBottom align='center'>
+        Filters
+      </Typography>
       <FormControl sx={{ m: 2, width: '88%' }}>
         <InputLabel id='sort-by-label'>Sort By</InputLabel>
         <Select

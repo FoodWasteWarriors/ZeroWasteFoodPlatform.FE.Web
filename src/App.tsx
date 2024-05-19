@@ -19,6 +19,7 @@ import EditProduct from './pages/edit-product/EditProduct'
 import Register from './pages/register/Register'
 import MonitoredProducts from './pages/monitored-products/MonitoredProducts'
 import Reports from './pages/reports/Reports'
+import StoreProduct from './pages/store-product/StoreProduct'
 
 function App() {
   const themeMode = useAppSelector(selectThemeMode)
@@ -42,12 +43,14 @@ function App() {
                 path="/profile/:userId"
                 element={IsAuthorized('/profile/:userId') ? <UserProfile /> : <Navigate to="/login" />}
               />
+
               <Route path="/register" element={<Register />} />
               <Route path="/store/:storeId" element={<Store />} />
               <Route path="/my-products" element={<Store />} />
               <Route path="/monitored-products" element={<MonitoredProducts />} />
               <Route path="/edit-product/:productId" element={<EditProduct />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="product/:productId" element={<StoreProduct />} />
               <Route
                 path="/shopping-list"
                 element={IsAuthorized('/shopping-list') ? <ShoppingList /> : <Navigate to="/login" />}
