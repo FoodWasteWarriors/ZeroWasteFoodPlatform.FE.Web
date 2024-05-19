@@ -50,7 +50,7 @@ function App() {
               <Route path="/monitored-products" element={<MonitoredProducts />} />
               <Route path="/edit-product/:productId" element={<EditProduct />} />
               <Route path="/reports" element={<Reports />} />
-              <Route path="product/:productId" element={<StoreProduct />} />
+              <Route path="/product/:productId" element={<StoreProduct />} />
               <Route
                 path="/shopping-list"
                 element={IsAuthorized('/shopping-list') ? <ShoppingList /> : <Navigate to="/login" />}

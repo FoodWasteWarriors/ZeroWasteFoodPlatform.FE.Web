@@ -1,4 +1,4 @@
-import { Box, Grid, Pagination, Stack, styled } from '@mui/material'
+import { Box, Grid, Pagination, Stack, styled, Typography } from '@mui/material'
 import { useGetShoppingListQuery } from '../../store/apis/customerApi'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
@@ -12,6 +12,7 @@ import { selectRightDrawerWidth } from '../../store/features/right-drawer/rightD
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { useGetRecommendedProductsQuery } from '../../store/apis/recommendationApi'
+import { Link } from 'react-router-dom'
 
 type PropsType = {
   data: ServiceCollectionResponse<StoreProductGetDto> | undefined
@@ -60,14 +61,29 @@ function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, se
           xl={12}
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}
         >
-          <Carousel showThumbs={false} showArrows width={500}>
-            {recommendedProductsData?.data?.map((storeProduct) => (
-              <div key={storeProduct.id}>
-                <img src={storeProduct.photo} alt={storeProduct.name} />
-                <p className="legend">{storeProduct.name}</p>
-              </div>
-            ))}
-          </Carousel>
+          <Stack spacing={2}>
+            <Typography variant="h3" align="center" gutterBottom>
+              Recommended Products
+            </Typography>
+            <Carousel showThumbs={false} showArrows width={350} swipeable={true} infiniteLoop autoPlay>
+              {recommendedProductsData?.data?.map((storeProduct) => (
+                <Link to={`/product/${storeProduct.id}`} key={storeProduct.id}>
+                  <div key={storeProduct.id}>
+                    <img
+                      style={{
+                        aspectRatio: '1/1',
+                        maxWidth: '300px',
+                        maxHeight: '300px'
+                      }}
+                      src={storeProduct.photo}
+                      alt={storeProduct.name}
+                    />
+                    <p className="legend">{storeProduct.name}</p>
+                  </div>
+                </Link>
+              ))}
+            </Carousel>
+          </Stack>
         </Grid>
 
         {data?.data?.map((storeProduct) => (

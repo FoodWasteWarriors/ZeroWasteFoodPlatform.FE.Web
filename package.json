@@ -23,7 +23,6 @@
     "react": "^18.2.0",
     "react-barcode": "^1.5.3",
     "react-dom": "^18.2.0",
-    "react-qr-barcode-scanner": "^1.0.6",
     "react-redux": "^9.1.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.22.3",
