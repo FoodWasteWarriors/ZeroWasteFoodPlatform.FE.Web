@@ -20,7 +20,6 @@ import { selectAuthUserType } from '../../store/features/auth/authSelectors'
 import { getFormattedDate } from '../../utils/helpers/dateTimeHelpers'
 import { getFinalPrice } from '../../utils/helpers/priceHelpers'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
-import YouMustLoginDialog from '../you-must-login-dialog/YouMustLoginDialog'
 
 type PropType = {
   storeProduct: StoreProductGetDto
@@ -31,7 +30,6 @@ type PropType = {
 function StoreProductCard(props: PropType) {
   const { storeProduct, inTheShoppingList, isMyStore } = props
   const [isFavorite, setIsFavorite] = useState(inTheShoppingList)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const role = useAppSelector(selectAuthUserType)
   const navigate = useNavigate()
 
@@ -49,7 +47,6 @@ function StoreProductCard(props: PropType) {
 
   const handleFavoriteClick = () => {
     if (!role) {
-      setIsDialogOpen(true)
       return
     }
 
@@ -83,50 +80,56 @@ function StoreProductCard(props: PropType) {
           {storeProduct.business.name}
         </Typography>
       </Link>
-      <CardMedia
-        component='img'
-        alt={storeProduct.name}
-        height='140'
-        image={storeProduct.photo}
-        title={storeProduct.name}
-      />
-      {discountRate && (
-        <DiscountRateContainer>
-          <SellIcon fontSize='inherit' />
-          {discountRate}
-        </DiscountRateContainer>
-      )}
-      <CardContent>
-        <Typography variant='h5' component='h2' fontSize={20}>
-          {storeProduct.name}
-        </Typography>
-        {storeProduct.expirationDate && (
-          <Typography variant='body2' color='textSecondary' marginBottom={1}>
-            Expires In: {getFormattedDate(storeProduct.expirationDate)}
-          </Typography>
+      <Link
+        to={`/product/${storeProduct.id}`}
+        style={{ textDecoration: 'none' }}
+      >
+        <CardMedia
+          component='img'
+          alt={storeProduct.name}
+          height='140'
+          image={storeProduct.photo}
+          title={storeProduct.name}
+        />
+        {discountRate && (
+          <DiscountRateContainer>
+            <SellIcon fontSize='inherit' />
+            {discountRate}
+          </DiscountRateContainer>
         )}
-        <LowerCardBody>
-          <Typography
-            variant='h6'
-            color='textSecondary'
-            sx={{
-              textDecoration: 'line-through',
-              fontSize: '14px',
-            }}
-          >
-            ${storeProduct.originalPrice.toFixed(2)}
+
+        <CardContent>
+          <Typography variant='h5' component='h2' fontSize={20}>
+            {storeProduct.name}
           </Typography>
-          <Typography
-            variant='h6'
-            component='h3'
-            color={'primary'}
-            sx={{ marginLeft: '4px', fontSize: '22px' }}
-          >
-            ${finalPrice.toFixed(2)}
-          </Typography>
-        </LowerCardBody>
-      </CardContent>
-      
+          {storeProduct.expirationDate && (
+            <Typography variant='body2' color='textSecondary' marginBottom={1}>
+              Expires In: {getFormattedDate(storeProduct.expirationDate)}
+            </Typography>
+          )}
+          <LowerCardBody>
+            <Typography
+              variant='h6'
+              color='textSecondary'
+              sx={{
+                textDecoration: 'line-through',
+                fontSize: '14px',
+              }}
+            >
+              ${storeProduct.originalPrice.toFixed(2)}
+            </Typography>
+            <Typography
+              variant='h6'
+              component='h3'
+              color={'primary'}
+              sx={{ marginLeft: '4px', fontSize: '22px' }}
+            >
+              ${finalPrice.toFixed(2)}
+            </Typography>
+          </LowerCardBody>
+        </CardContent>
+      </Link>
+
       {role === UserRoles.Customer && (
         <IconButtonContainer
           isFavorite={isFavorite}
@@ -141,13 +144,11 @@ function StoreProductCard(props: PropType) {
           <Edit />
         </IconButtonContainer>
       )}
-
-      <YouMustLoginDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </ProductCard>
   )
 }
 
-const ProductCard = styled(Card)(() => ({
+export const ProductCard = styled(Card)(() => ({
   paddingBottom: '24px',
   position: 'relative',
   '&:hover': {

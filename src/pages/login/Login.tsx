@@ -7,6 +7,7 @@ import {
   Stack,
   Alert,
   Snackbar,
+  styled,
 } from '@mui/material'
 import { useLoginUserMutation } from '../../store/apis/authApi'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks/reduxHooks'
@@ -71,8 +72,7 @@ function Login() {
 
   // Add this to your form
   return (
-    <Container
-      component='main'
+    <CenteredContainer
       sx={{
         height: 'calc(100vh - 200px)',
         display: 'flex',
@@ -143,8 +143,16 @@ function Login() {
           </Alert>
         ))}
       </Stack>
-    </Container>
+    </CenteredContainer>
   )
 }
+
+const CenteredContainer = styled(Container)({
+  height: 'calc(100vh - 200px)',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+})
 
 export default Login

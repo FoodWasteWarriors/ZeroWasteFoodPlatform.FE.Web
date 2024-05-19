@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import StoreProductsGrid from '../../components/store-products-grid/StoreProductsGrid'
 import { useGetStoreProductsQuery } from '../../store/apis/storeProducsApi'
 
+
 const productPerPage = 24
 
 function MainPage() {
@@ -11,7 +12,7 @@ function MainPage() {
 
   const { data, error, isLoading } = useGetStoreProductsQuery({
     pageSize: productPerPage,
-    page: currentPage,
+    page: currentPage
   })
 
   useEffect(() => {
@@ -22,6 +23,7 @@ function MainPage() {
 
   return (
     <Box>
+      
       <StoreProductsGrid
         data={data}
         error={error}
