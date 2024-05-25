@@ -5,7 +5,6 @@ import { useGetRecommendedProductsQuery } from '../../store/apis/recommendationA
 
 const RecommendedCarousel = () => {
   const { data } = useGetRecommendedProductsQuery()
-  
 
   return (
     <Grid
@@ -18,7 +17,7 @@ const RecommendedCarousel = () => {
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}
     >
       <Stack spacing={2}>
-        <Typography variant="h3" align="center" gutterBottom>
+        <Typography variant="h4" align="center" gutterBottom>
           Recommended Products
         </Typography>
         <Carousel showThumbs={false} showArrows width={350} swipeable={true} infiniteLoop autoPlay>
@@ -45,7 +44,3 @@ const RecommendedCarousel = () => {
 }
 
 export default RecommendedCarousel
-function useAppSelector(selectAuthUserType: any) {
-  throw new Error('Function not implemented.')
-}
-
