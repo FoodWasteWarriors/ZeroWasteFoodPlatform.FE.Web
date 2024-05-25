@@ -13,7 +13,7 @@ const storeProductsApi = createApi({
       }
 
       return headers
-    },
+    }
   }),
   endpoints: (builder) => ({
     getStoreProducts: builder.query<
@@ -23,18 +23,22 @@ const storeProductsApi = createApi({
         page?: number
         pageSize?: number
         nameQuery?: string
+        percentDiscountLow?: number
+        percentDiscountHigh?: number
+        originalPriceLow?: number
+        originalPriceHigh?: number
+        sortBy?: 'name' | 'price' | 'discount'
+        categoryIds?: string
+        storeIds?: string
       }
     >({
-      query: ({ page = 1, pageSize = 10, nameQuery }) => ({
+      query: ({ page = 1, pageSize = 10, nameQuery, ...rest }) => ({
         url: '/',
-        params: { page, pageSize, nameQuery },
-      }),
+        params: { page, pageSize, nameQuery, ...rest }
+      })
     }),
-    getStoreProductById: builder.query<
-      ServiceObjectResponse<StoreProductGetDto>,
-      string
-    >({
-      query: (id) => `/${id}`,
+    getStoreProductById: builder.query<ServiceObjectResponse<StoreProductGetDto>, string>({
+      query: (id) => `/${id}`
     }),
     getStoreProductsByUserId: builder.query<
       ServiceCollectionResponse<StoreProductGetDto>,
@@ -47,37 +51,28 @@ const storeProductsApi = createApi({
     >({
       query: ({ userId, page = 1, pageSize = 10, nameQuery }) => ({
         url: `/user/${userId}`,
-        params: { page, pageSize, nameQuery },
-      }),
+        params: { page, pageSize, nameQuery }
+      })
     }),
-    deleteStoreProduct: builder.mutation<
-      ServiceObjectResponse<StoreProductGetDto>,
-      string
-    >({
+    deleteStoreProduct: builder.mutation<ServiceObjectResponse<StoreProductGetDto>, string>({
       query: (id) => ({
         url: `/${id}`,
-        method: 'DELETE',
-      }),
+        method: 'DELETE'
+      })
     }),
-    createStoreProduct: builder.mutation<
-      ServiceObjectResponse<StoreProductGetDto>,
-      StoreProductAddDto
-    >({
+    createStoreProduct: builder.mutation<ServiceObjectResponse<StoreProductGetDto>, StoreProductAddDto>({
       query: (storeProduct) => ({
         url: '/',
         method: 'POST',
-        body: storeProduct,
-      }),
+        body: storeProduct
+      })
     }),
-    updateStoreProduct: builder.mutation<
-      ServiceObjectResponse<StoreProductGetDto>,
-      StoreProductUpdateDto
-    >({
+    updateStoreProduct: builder.mutation<ServiceObjectResponse<StoreProductGetDto>, StoreProductUpdateDto>({
       query: (storeProduct) => ({
         url: '/',
         method: 'PUT',
-        body: storeProduct,
-      }),
+        body: storeProduct
+      })
     }),
     addToShoppingList: builder.mutation<
       ServiceObjectResponse<StoreProductGetDto>,
@@ -86,8 +81,8 @@ const storeProductsApi = createApi({
       query: (body) => ({
         url: '/add-to-shopping-list',
         method: 'POST',
-        body,
-      }),
+        body
+      })
     }),
     removeFromShoppingList: builder.mutation<
       ServiceObjectResponse<StoreProductGetDto>,
@@ -96,10 +91,10 @@ const storeProductsApi = createApi({
       query: (body) => ({
         url: '/remove-from-shopping-list',
         method: 'POST',
-        body,
-      }),
-    }),
-  }),
+        body
+      })
+    })
+  })
 })
 
 export const {
@@ -110,7 +105,7 @@ export const {
   useCreateStoreProductMutation,
   useUpdateStoreProductMutation,
   useAddToShoppingListMutation,
-  useRemoveFromShoppingListMutation,
+  useRemoveFromShoppingListMutation
 } = storeProductsApi
 
 export default storeProductsApi

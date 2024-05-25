@@ -9,16 +9,13 @@ import {
   Snackbar,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import DefaultErrorMessage from '../default-error-message/DefaultErrorMessage'
 import { selectAuthUserId } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
-import {
-  useGetBusinessByIdQuery,
-  useUpdateBusinessMutation,
-} from '../../store/apis/businessApi'
+import { useGetBusinessByIdQuery, useUpdateBusinessMutation } from '../../store/apis/businessApi'
 
 const defaultActiveEdits = {
   name: false,
@@ -30,7 +27,7 @@ const defaultActiveEdits = {
   logo: false,
   coverPhoto: false,
   website: false,
-  address: false,
+  address: false
 }
 
 // TODO: Enable to change cover photo and logo
@@ -57,7 +54,7 @@ function StoreProfile() {
     address: '',
     coverPhoto: '' as string | null | undefined,
     website: '' as string | null | undefined,
-    role: null as UserRole,
+    role: null as UserRole
   })
 
   const SetDefaluts = useCallback(() => {
@@ -75,7 +72,7 @@ function StoreProfile() {
       coverPhoto: data!.data!.coverPhoto,
       website: data!.data!.website,
       role: data!.data!.role!,
-      address: data!.data!.address,
+      address: data!.data!.address
     })
   }, [data])
 
@@ -90,7 +87,7 @@ function StoreProfile() {
       useMultiFactorAuthentication: userDetails.useMultiFactorAuthentication,
       coverPhoto: userDetails.coverPhoto,
       website: userDetails.website,
-      address: userDetails.address,
+      address: userDetails.address
     })
       .unwrap()
       .then(() => {
@@ -104,9 +101,7 @@ function StoreProfile() {
         if (!error.data.messages) {
           errorMessages = Object.values(error.data.errors).flat() as string[]
         } else {
-          errorMessages = error.data.messages.map(
-            (message: ResponseMessage) => message.description
-          )
+          errorMessages = error.data.messages.map((message: ResponseMessage) => message.description)
         }
 
         setErrors(errorMessages)
@@ -131,7 +126,7 @@ function StoreProfile() {
         onClick={() => {
           setActiveEdits((prev) => ({
             ...prev,
-            [activeEditKey]: false,
+            [activeEditKey]: false
           }))
         }}
       />
@@ -141,7 +136,7 @@ function StoreProfile() {
         onClick={() => {
           setActiveEdits((prev) => ({
             ...prev,
-            [activeEditKey]: true,
+            [activeEditKey]: true
           }))
         }}
       />
@@ -154,37 +149,32 @@ function StoreProfile() {
 
   if (isLoading) return <div>Loading...</div>
 
-  if (error)
-    return <DefaultErrorMessage message='Error loading shopping list' />
+  if (error) return <DefaultErrorMessage message="Error loading shopping list" />
 
   return (
     <Fragment>
-      <Stack alignItems='center' spacing={2} my={2}>
-        <Avatar
-          src={userDetails.logo}
-          alt={userDetails.username}
-          sx={{ width: 100, height: 100 }}
-        />
-        <Typography variant='h4' style={{ marginTop: 10 }}>
+      <Stack alignItems="center" spacing={2} my={2}>
+        <Avatar src={userDetails.logo} alt={userDetails.username} sx={{ width: 100, height: 100 }} />
+        <Typography variant="h4" style={{ marginTop: 10 }}>
           {`${userDetails.name}`}
         </Typography>
 
-        <Typography variant='h6'>{userDetails.role}</Typography>
+        <Typography variant="h6">{userDetails.role}</Typography>
       </Stack>
 
-      <Typography variant='body2' style={{ margin: 10, textAlign: 'right' }}>
+      <Typography variant="body2" style={{ margin: 10, textAlign: 'right' }}>
         Last Login: {userDetails.lastLoginTime}
       </Typography>
 
       <Stack spacing={2}>
         <TextField
-          label='Username'
+          label="Username"
           value={userDetails.username}
           disabled={!activeEdits.username}
           onChange={(e) => {
             setUserDetails((prev) => ({
               ...prev,
-              username: e.target.value,
+              username: e.target.value
             }))
           }}
           fullWidth
@@ -195,16 +185,16 @@ function StoreProfile() {
                 onClick={() => {
                   setActiveEdits((prev) => ({
                     ...prev,
-                    username: !prev.username,
+                    username: !prev.username
                   }))
                 }}
               />
-            ),
+            )
           }}
         />
 
         <TextField
-          label='Address'
+          label="Address"
           value={userDetails.address}
           disabled={!activeEdits.address}
           fullWidth
@@ -212,16 +202,16 @@ function StoreProfile() {
           onChange={(e) => {
             setUserDetails((prev) => ({
               ...prev,
-              address: e.target.value,
+              address: e.target.value
             }))
           }}
           InputProps={{
-            endAdornment: EditOrSaveButton('address'),
+            endAdornment: EditOrSaveButton('address')
           }}
         />
 
         <TextField
-          label='Description'
+          label="Description"
           value={userDetails.description}
           disabled={!activeEdits.description}
           fullWidth
@@ -229,74 +219,66 @@ function StoreProfile() {
           onChange={(e) => {
             setUserDetails((prev) => ({
               ...prev,
-              description: e.target.value,
+              description: e.target.value
             }))
           }}
           InputProps={{
-            endAdornment: EditOrSaveButton('description'),
+            endAdornment: EditOrSaveButton('description')
           }}
         />
 
         <TextField
-          label='Email'
+          label="Email"
           value={userDetails.email}
           disabled={!activeEdits.email}
           fullWidth
-          helperText={
-            !userDetails.emailVerified
-              ? 'Email not verified!'
-              : 'Email verified.'
-          }
+          helperText={!userDetails.emailVerified ? 'Email not verified!' : 'Email verified.'}
           onChange={(e) => {
             setUserDetails((prev) => ({
               ...prev,
-              email: e.target.value,
+              email: e.target.value
             }))
           }}
           InputProps={{
-            endAdornment: EditOrSaveButton('email'),
+            endAdornment: EditOrSaveButton('email')
           }}
         />
         <TextField
-          label='Phone Number'
+          label="Phone Number"
           value={userDetails.phoneNumber}
           disabled={!activeEdits.phoneNumber}
           fullWidth
-          helperText={
-            !userDetails.phoneNumberVerified
-              ? 'Phone number not verified!'
-              : 'Phone number verified.'
-          }
+          helperText={!userDetails.phoneNumberVerified ? 'Phone number not verified!' : 'Phone number verified.'}
           onChange={(e) => {
             setUserDetails((prev) => ({
               ...prev,
-              phoneNumber: e.target.value,
+              phoneNumber: e.target.value
             }))
           }}
           InputProps={{
-            endAdornment: EditOrSaveButton('phoneNumber'),
+            endAdornment: EditOrSaveButton('phoneNumber')
           }}
         />
 
         <TextField
-          label='Website'
+          label="Website"
           value={userDetails.website}
           disabled={!activeEdits.website}
           fullWidth
           onChange={(e) => {
             setUserDetails((prev) => ({
               ...prev,
-              website: e.target.value,
+              website: e.target.value
             }))
           }}
           InputProps={{
-            endAdornment: EditOrSaveButton('website'),
+            endAdornment: EditOrSaveButton('website')
           }}
         />
 
-        <Box display='flex' alignItems='center'>
+        <Box display="flex" alignItems="center">
           <FormControlLabel
-            label='Use Multi-Factor Authentication'
+            label="Use Multi-Factor Authentication"
             checked={userDetails.useMultiFactorAuthentication}
             control={
               <Checkbox
@@ -305,7 +287,7 @@ function StoreProfile() {
                 onChange={(e) => {
                   setUserDetails((prev) => ({
                     ...prev,
-                    useMultiFactorAuthentication: e.target.checked,
+                    useMultiFactorAuthentication: e.target.checked
                   }))
                 }}
                 disabled={!activeEdits.useMultiFactorAuthentication}
@@ -315,42 +297,23 @@ function StoreProfile() {
 
           {EditOrSaveButton('useMultiFactorAuthentication')}
         </Box>
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={2}
-          justifyContent='center'
-        >
-          <Button
-            variant='text'
-            color='primary'
-            onClick={() => handleUserUpdate()}
-            fullWidth
-          >
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+          <Button variant="text" color="primary" onClick={() => handleUserUpdate()} fullWidth>
             Save
           </Button>
 
-          <Button
-            variant='text'
-            color='error'
-            onClick={() => handleCancleUpdate()}
-            fullWidth
-          >
+          <Button variant="text" color="error" onClick={() => handleCancleUpdate()} fullWidth>
             Cancel
           </Button>
 
           <Snackbar open={success} autoHideDuration={6000}>
-            <Alert
-              severity='success'
-              variant='filled'
-              sx={{ width: '100%' }}
-              onClose={() => setSuccess(false)}
-            >
+            <Alert severity="success" variant="filled" sx={{ width: '100%' }} onClose={() => setSuccess(false)}>
               User details updated successfully!
             </Alert>
           </Snackbar>
         </Stack>
         {errors.map((error, index) => (
-          <Alert severity='error' key={index}>
+          <Alert severity="error" key={index}>
             {error}
           </Alert>
         ))}

@@ -1,4 +1,4 @@
-import { Box, Grid, Pagination, Stack, styled, Typography } from '@mui/material'
+import { Box, Grid, Pagination, Stack, styled } from '@mui/material'
 import { useGetShoppingListQuery } from '../../store/apis/customerApi'
 import { selectAuthUserId, selectAuthUserType } from '../../store/features/auth/authSelectors'
 import { useAppSelector } from '../../utils/hooks/reduxHooks'
@@ -12,6 +12,7 @@ import { selectRightDrawerWidth } from '../../store/features/right-drawer/rightD
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import UserRoles from '../../constants/userRoles'
 import RecommendedCarousel from '../recommended-carousel/RecommendedCarousel'
+import { StoreProductsFilterType } from '../../pages/main-page/MainPage'
 
 type PropsType = {
   data: ServiceCollectionResponse<StoreProductGetDto> | undefined
@@ -20,9 +21,10 @@ type PropsType = {
   currentPage: number
   totalPages: number
   setCurrentPage: (page: number) => void
+  setFilter?: (filter: StoreProductsFilterType) => void
 }
 
-function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, setCurrentPage }: PropsType) {
+function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, setCurrentPage, setFilter }: PropsType) {
   const fullUrl = window.location.href
   const loggedInUserId = useAppSelector(selectAuthUserId)
   const rightDrawerLength = useAppSelector(selectRightDrawerWidth)
@@ -70,7 +72,7 @@ function StoreProductsGrid({ data, error, isLoading, currentPage, totalPages, se
         </PaginationContainer>
       </ProductsGrid>
 
-      <RightDrawerContainer isMyStore={isMyStore} />
+      <RightDrawerContainer isMyStore={isMyStore} setFilter={setFilter} />
     </Stack>
   )
 }
