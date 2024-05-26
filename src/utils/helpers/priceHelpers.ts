@@ -1,6 +1,9 @@
 export function getFinalPrice(price: number, discountRate: number): number {
   const discount = price * (discountRate / 100)
-  const finalPrice = price - discount
+
+  const roundedDiscount = Math.round(discount * 100) / 100
+
+  const finalPrice = price - roundedDiscount
   const finalPriceString = finalPrice.toFixed(2)
   const finalPriceArray = finalPriceString.split('.')
   const decimal = Number(finalPriceArray[1])

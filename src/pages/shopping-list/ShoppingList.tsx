@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Typography,
+  Typography
 } from '@mui/material'
 import DefaultErrorMessage from '../../components/default-error-message/DefaultErrorMessage'
 import { useGetShoppingListQuery } from '../../store/apis/customerApi'
@@ -57,16 +57,15 @@ function ShoppingList() {
 
   if (isLoading) return <div>Loading...</div>
 
-  if (error)
-    return <DefaultErrorMessage message='Error loading shopping list' />
+  if (error) return <DefaultErrorMessage message="Error loading shopping list" />
 
   return (
     <Container>
-      <Typography variant='h4' gutterBottom align='center' margin={2}>
+      <Typography variant="h4" gutterBottom align="center" margin={2}>
         Shopping List
       </Typography>
       <Box sx={{ overflowX: 'auto', maxWidth: '85vw', margin: 'auto' }}>
-        <Table aria-label='basic table'>
+        <Table aria-label="basic table">
           <TableHead>
             <TableRow>
               <TableCell>
@@ -93,7 +92,7 @@ function ShoppingList() {
                   direction={orderBy === 'originalPrice' ? order : 'asc'}
                   onClick={() => handleSort('originalPrice')}
                 >
-                  Original Price
+                  Original Price (TRY)
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -111,7 +110,7 @@ function ShoppingList() {
                   direction={orderBy === 'discountedPrice' ? order : 'asc'}
                   onClick={() => handleSort('discountedPrice')}
                 >
-                  Discounted Price
+                  Discounted Price (TRY)
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -133,16 +132,10 @@ function ShoppingList() {
                 <TableCell>{item.business.name}</TableCell>
                 <TableCell>{item.originalPrice}</TableCell>
                 <TableCell>{item.percentDiscount}</TableCell>
-                <TableCell>
-                  {getFinalPrice(item.originalPrice, item.percentDiscount)}
-                </TableCell>
+                <TableCell>{getFinalPrice(item.originalPrice, item.percentDiscount)}</TableCell>
                 <TableCell>{getFormattedDate(item.expirationDate!)}</TableCell>
                 <TableCell>
-                  <Button
-                    variant='outlined'
-                    color='error'
-                    onClick={() => handleDeleteProduct(item.id)}
-                  >
+                  <Button variant="outlined" color="error" onClick={() => handleDeleteProduct(item.id)}>
                     Delete
                   </Button>
                 </TableCell>
