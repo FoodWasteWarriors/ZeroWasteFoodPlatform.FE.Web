@@ -51,16 +51,19 @@ function Login() {
       .catch((error) => {
         let errorMessages
 
-        if (!error.data.messages) {
-          errorMessages = Object.values(error.data.errors).flat() as string[]
+        if (error.data) {
+          if (!error.data.messages) {
+            errorMessages = Object.values(error.data.errors).flat() as string[]
+          } else {
+            errorMessages = error.data.messages.map(
+              (message: ResponseMessage) => message.description
+            )
+          }
         } else {
-          errorMessages = error.data.messages.map(
-            (message: ResponseMessage) => message.description
-          )
+          errorMessages = ['Unexpected error occurred.']
         }
 
         setErrors(errorMessages)
-        setSuccess(false)
       })
   }
 

@@ -22,18 +22,18 @@ const RecommendedCarousel = () => {
         </Typography>
         <Carousel showThumbs={false} showArrows width={350} swipeable={true} infiniteLoop autoPlay>
           {data?.data?.map((storeProduct) => (
-            <Link to={`/product/${storeProduct.id}`} key={storeProduct.id}>
-              <div key={storeProduct.id}>
+            <Link to={`/product/${storeProduct?.id ?? 'default'}`} key={storeProduct?.id ?? 'default'}>
+              <div key={storeProduct?.id ?? 'default'}>
                 <img
                   style={{
                     aspectRatio: '1/1',
                     maxWidth: '300px',
                     maxHeight: '300px'
                   }}
-                  src={storeProduct.photo}
-                  alt={storeProduct.name}
+                  src={storeProduct?.photo ?? 'https://www.4me.com/wp-content/uploads/2018/01/4me-icon-product.png'}
+                  alt={storeProduct?.name ?? 'product'}
                 />
-                <p className="legend">{storeProduct.name}</p>
+                <p className="legend">{storeProduct?.name ?? 'product'}</p>
               </div>
             </Link>
           ))}

@@ -129,6 +129,7 @@ function Register() {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                marginTop: '64px',
             }}
         >
             <Typography variant="h4" align="center" mt={3} mb={3}>
